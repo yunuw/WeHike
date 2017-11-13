@@ -7,6 +7,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 public class SignInActivity extends AppCompatActivity {
     // TODO: replac with the permission that is actually needed
@@ -29,20 +32,30 @@ public class SignInActivity extends AppCompatActivity {
         else { //if we're missing permission.
             askForPermission();
         }
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public void signIn() {
+    public void signIn(View view) {
         // TODO: call API, if sign in successful, open main Activity, otherwise popup dialog
         openMainActivity();
     }
 
-    public void signUp() {
+    public void signUp(View view) {
 
+    }
+
+    public void findPassword(View view) {
+        Toast.makeText(SignInActivity.this, "Not implemented", Toast.LENGTH_SHORT).show();
     }
 
     private void openMainActivityIfSignedIn() {
         // TODO: Check if already signed in
-        openMainActivity();
+        boolean isSignedIn = false;
+
+        if (isSignedIn) {
+            openMainActivity();
+        }
     }
 
     private void openMainActivity() {
