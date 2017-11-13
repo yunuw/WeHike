@@ -41,8 +41,9 @@ public class SignInActivity extends AppCompatActivity {
         openMainActivity();
     }
 
-    public void signUp(View view) {
-
+    public void openSignUpDialog(View view) {
+        SignUpDiaglog dialog = SignUpDiaglog.newInstance();
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     public void findPassword(View view) {

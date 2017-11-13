@@ -17,6 +17,8 @@
         android:background="#FFFFFF"
         android:hint="@string/user_name_input_hint"
         android:textSize="22sp"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="2dp"
         android:maxLines="1"
         android:inputType="text"/>
 
@@ -30,6 +32,8 @@
         android:background="#FFFFFF"
         android:hint="@string/pwd_input_hint"
         android:textSize="22sp"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="2dp"
         android:maxLines="1"
         android:inputType="textPassword"/>
 
@@ -57,7 +61,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:focusable="false"
-        android:onClick="signUp"/>
+        android:onClick="openSignUpDialog"/>
 
     <Button
         android:id="@id/find_pwd"
