@@ -116,9 +116,11 @@ public class SignUpDiaglog extends DialogFragment {
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(SignUpDiaglog.this.getActivity(),
-                            "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data),
-                            Toast.LENGTH_LONG).show();
+                    String errMsg = "Sign up failed!";
+                    if (error.networkResponse != null) {
+                        errMsg = "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                    }
+                    Toast.makeText(SignUpDiaglog.this.getActivity(), errMsg, Toast.LENGTH_LONG).show();
                 }
             }
         );

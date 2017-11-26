@@ -32,6 +32,8 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity {
+    public static final String CREDENTIAL_FILE_NAME = "credential";
+
     // TODO: replac with the permission that is actually needed
     private static final String[] RequiredPermissions = new String[] {
         Manifest.permission.READ_PHONE_STATE,
@@ -40,7 +42,6 @@ public class SignInActivity extends AppCompatActivity {
 
     // Use the same request code for permission since we don't have special handling for a specific permission
     private static final int REQUEST_CODE_PERMISSIONS = 10;
-    private static final String CREDENTIAL_FILE_NAME = "credential";
 
     private String backendPrefix;
 
@@ -92,9 +93,11 @@ public class SignInActivity extends AppCompatActivity {
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(SignInActivity.this,
-                            "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data),
-                            Toast.LENGTH_LONG).show();
+                    String errMsg = "Sign in failed!";
+                    if (error.networkResponse != null) {
+                        errMsg = "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                    }
+                    Toast.makeText(SignInActivity.this, errMsg, Toast.LENGTH_LONG).show();
                 }
             }
         );

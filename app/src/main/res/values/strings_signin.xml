@@ -1,8 +1,4 @@
 <resources>
-    <string name="app_name">WeHike</string>
-    <!-- Backend API -->
-    <string name="backend_prefix">http://wehike.cloudapp.net</string>
-
     <!-- Sign in activity -->
     <string name="sign_in_btn_text">Sign in</string>
     <string name="sign_up_btn_text">Sign up</string>
