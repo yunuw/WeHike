@@ -5,11 +5,31 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity {
     // TODO: replac with the permission that is actually needed
@@ -20,11 +40,16 @@ public class SignInActivity extends AppCompatActivity {
 
     // Use the same request code for permission since we don't have special handling for a specific permission
     private static final int REQUEST_CODE_PERMISSIONS = 10;
+    private static final String CREDENTIAL_FILE_NAME = "credential";
+
+    private String backendPrefix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        backendPrefix = this.getResources().getString(R.string.backend_prefix);
 
         if(isAllPermissionGranted()) {
             openMainActivityIfSignedIn();
@@ -37,8 +62,44 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void signIn(View view) {
-        // TODO: call API, if sign in successful, open main Activity, otherwise popup dialog
-        openMainActivity();
+        EditText signinUserName = (EditText) this.findViewById(R.id.input_user_name);
+        EditText signinPassword = (EditText) this.findViewById(R.id.input_pwd);
+        final String userName = signinUserName.getText().toString();
+        final String password = signinPassword.getText().toString();
+
+        String urlString = String.format("%s/users/login?userName=%s&password=%s", backendPrefix, userName, password);
+        Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        boolean success = response.getBoolean("success");
+
+                        if (success) {
+                            String authToken = response.getString("authToken");
+                            saveCredential(userName, authToken);
+
+                            openMainActivity();
+                        } else {
+                            String msg = response.getString("message");
+                            Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(SignInActivity.this,
+                            "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        );
+
+        RequestSingleton.getInstance(this).add(request);
     }
 
     public void openSignUpDialog(View view) {
@@ -48,20 +109,6 @@ public class SignInActivity extends AppCompatActivity {
 
     public void findPassword(View view) {
         Toast.makeText(SignInActivity.this, "Not implemented", Toast.LENGTH_SHORT).show();
-    }
-
-    private void openMainActivityIfSignedIn() {
-        // TODO: Check if already signed in
-        boolean isSignedIn = false;
-
-        if (isSignedIn) {
-            openMainActivity();
-        }
-    }
-
-    private void openMainActivity() {
-        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-        startActivity(intent);
     }
 
     public void onRequestPermissionsResult(int requestCode,
@@ -82,6 +129,78 @@ public class SignInActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    private void openMainActivityIfSignedIn() {
+        try {
+            File file = new File(getFilesDir(), CREDENTIAL_FILE_NAME);
+            if(!file.exists()){
+                return;
+            }
+
+            FileInputStream fis = openFileInput(CREDENTIAL_FILE_NAME);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String userName = reader.readLine();
+            final String authToken = reader.readLine();
+            reader.close();
+
+            String urlString = String.format("%s/users/verify", backendPrefix);
+            Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                boolean success = response.getBoolean("success");
+                                if (success) {
+                                    openMainActivity();
+                                } else {
+                                    String msg = response.getString("message");
+                                    Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(SignInActivity.this,
+                                    "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+            ) {
+                public Map<String, String> getHeaders() {
+                    Map<String, String> mHeaders = new ArrayMap<String, String>();
+                    mHeaders.put("AuthorizationHeader", authToken);
+                    return mHeaders;
+                }
+            };
+
+            RequestSingleton.getInstance(this).add(request);
+        } catch (IOException ioe) {
+            Toast.makeText(this, ioe.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void saveCredential(String userName, String authToken) {
+        try {
+            FileOutputStream fos = openFileOutput(CREDENTIAL_FILE_NAME, MODE_PRIVATE);
+
+            PrintWriter out = new PrintWriter(fos);
+            out.println(userName);
+            out.println(authToken);
+            out.close();
+
+        }catch (IOException ioe){
+            Toast.makeText(this, ioe.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void openMainActivity() {
+        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private boolean isAllPermissionGranted() {

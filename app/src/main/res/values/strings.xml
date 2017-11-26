@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">WeHike</string>
+    <!-- Backend API -->
+    <string name="backend_prefix">http://wehike.cloudapp.net</string>
+
     <!-- Sign in activity -->
     <string name="sign_in_btn_text">Sign in</string>
     <string name="sign_up_btn_text">Sign up</string>
@@ -16,4 +19,5 @@
     <string name="password_null">Password can\'t be empty!</string>
     <string name="confirm_password_null">Please confirm password!</string>
     <string name="pwd_not_match">The password doesn\'t match!</string>
+    <string name="signup_succeed">Sign up succeeded</string>
 </resources>
