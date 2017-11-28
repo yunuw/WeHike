@@ -1,12 +1,32 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="edu.uw.yw239.wehike.PostsFragment">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true"
+tools:context="edu.uw.yw239.wehike.PostsFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/newsarticle_list"
+        android:name="edu.uw.yw239.wehike.PostsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Posts fragment" />
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="edu.uw.yw239.wehike.PostsFragment"
+        tools:listitem="@layout/posts_list_content" />
 
-</FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+    android:id="@+id/add_new_post_fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="20dp"
+    app:srcCompat="@drawable/ic_add_new_post" />
+
+</android.support.design.widget.CoordinatorLayout>
+
