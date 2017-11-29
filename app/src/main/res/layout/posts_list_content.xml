@@ -19,29 +19,29 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/postImageView"
+                android:id="@+id/post_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/signin_background"/>
 
             <ImageView
-                android:id="@+id/authorImageView"
+                android:id="@+id/user_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/postImageView"
+                android:layout_below="@+id/post_image"
                 android:src="@mipmap/ic_profile_picture"/>
 
             <TextView
-                android:id="@+id/titleTextView"
+                android:id="@+id/post_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/postImageView"
-                android:layout_toRightOf="@+id/authorImageView"
+                android:layout_below="@+id/post_image"
+                android:layout_toRightOf="@+id/user_image"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="11dp"
                 android:layout_marginBottom="5dp"
@@ -52,13 +52,13 @@
                 android:maxLines="1" />
 
             <TextView
-                android:id="@+id/detailsTextView"
+                android:id="@+id/post_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="15dp"
-                android:layout_below="@+id/titleTextView"
-                android:layout_toRightOf="@+id/authorImageView"
+                android:layout_below="@+id/post_name"
+                android:layout_toRightOf="@+id/user_image"
                 android:text="Today is a good day! I went hiking with Sandy and Dania. The Rattlesnake Trail is amazong!"
                 android:ellipsize="end"
                 android:maxLines="2"
