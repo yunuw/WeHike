@@ -29,6 +29,7 @@
             android:src="@drawable/ic_010_post_it"
             android:background="@color/colorTabUnselected"
             android:onClick="showPosts"/>
+
         <ImageButton
             android:id="@+id/contacts_button"
             android:layout_width="wrap_content"
@@ -36,7 +37,8 @@
             android:layout_weight="1"
             android:src="@drawable/ic_011_multiple_users_silhouette"
             android:background="@color/colorTabUnselected"
-            android:onClick="showContacts"/>
+            android:onClick="showContacts" />
+
         <ImageButton
             android:id="@+id/settings_button"
             android:layout_width="wrap_content"
