@@ -1,6 +1,9 @@
 package edu.uw.yw239.wehike;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,9 +25,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: test whether we need to restore the selected tab when it got switched from other activities
-        ImageButton showTrailsButton = (ImageButton)findViewById(R.id.trails_button);
-        showTrails(showTrailsButton);
+        boolean openFragmentFromIntent = false;
+
+        // Set up the back stack from ConversationActivity
+        Intent intent = getIntent();
+
+        if(intent != null) {
+            int val = intent.getIntExtra(ConversationActivity.BACK_TO_FRAGMENT_KEY, 0);
+
+            if (val == ConversationActivity.BACK_TO_FRAGMENT_VALUE) {
+                openFragmentFromIntent = true;
+                showContacts(findViewById(R.id.contacts_button));
+            }
+        }
+
+        if(openFragmentFromIntent == false){
+            ImageButton showTrailsButton = (ImageButton)findViewById(R.id.trails_button);
+            showTrails(showTrailsButton);
+        }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+
     }
 
     public void showTrails(View view) {

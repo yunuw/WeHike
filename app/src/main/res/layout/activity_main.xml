@@ -29,14 +29,16 @@
             android:src="@mipmap/ic_launcher"
             android:background="@color/colorTabUnselected"
             android:onClick="showPosts"/>
+
         <ImageButton
             android:id="@+id/contacts_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher"
             android:background="@color/colorTabUnselected"
-            android:onClick="showContacts"/>
+            android:onClick="showContacts"
+            android:src="@mipmap/ic_launcher" />
+
         <ImageButton
             android:id="@+id/settings_button"
             android:layout_width="wrap_content"
