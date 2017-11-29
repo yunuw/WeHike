@@ -16,25 +16,25 @@
        <ImageButton
            android:id="@+id/trails_button"
            android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
+           android:layout_height="43dp"
            android:layout_weight="1"
-           android:src="@mipmap/ic_launcher"
+           android:src="@drawable/ic_008_mountain_running_silhouette"
            android:background="@color/colorTabUnselected"
            android:onClick="showTrails"/>
         <ImageButton
             android:id="@+id/posts_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="43dp"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_010_post_it"
             android:background="@color/colorTabUnselected"
             android:onClick="showPosts"/>
         <ImageButton
             android:id="@+id/contacts_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="43dp"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_011_multiple_users_silhouette"
             android:background="@color/colorTabUnselected"
             android:onClick="showContacts"/>
     </LinearLayout>
