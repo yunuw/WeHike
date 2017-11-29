@@ -21,7 +21,7 @@
             <ImageView
                 android:id="@+id/postImageView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/signin_background"/>
 
@@ -47,7 +47,7 @@
                 android:layout_marginBottom="5dp"
                 android:textSize="17dp"
                 android:textStyle="bold"
-                android:text="Donald Duck"
+                android:text="Nan Xiao"
                 android:ellipsize="end"
                 android:maxLines="1" />
 
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_below="@+id/titleTextView"
                 android:layout_toRightOf="@+id/authorImageView"
-                android:text="Today is a good day! I went to school, had lunch, then went shopping."
+                android:text="Today is a good day! I went hiking with Sandy and Dania. The Rattlesnake Trail is amazong!"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:layout_alignParentEnd="true" />
