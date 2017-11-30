@@ -69,6 +69,8 @@ public class PostsFragment extends Fragment {
             mQuery = getArguments().getString(QUERY);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -77,13 +79,13 @@ public class PostsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_new_post_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                create new post activity
+        FloatingActionButton mFab = (FloatingActionButton) view.findViewById(R.id.add_new_post_fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-                addPostClickAction();
+                // go to the create post activity
+                Intent intent = new Intent(getActivity(), CreatePostActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -160,4 +162,5 @@ public class PostsFragment extends Fragment {
     private void addPostClickAction() {
         //CreatePostActivity
     }
+
 }
