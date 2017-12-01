@@ -72,11 +72,11 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
         // Set up the hint status for post description
-        postDesc.setHint(getResources().getString(R.string.post_desc_hint));
+        //postDesc.setHint(getResources().getString(R.string.post_desc_hint));
 
         postDesc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
+                if (!hasFocus)
                     postDesc.setHint(getResources().getString(R.string.post_desc_hint));
                 else
                     postDesc.setHint("");
@@ -84,6 +84,11 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void onResume(){
+        postDesc.setHint(getResources().getString(R.string.post_desc_hint));
+        super.onResume();
     }
 
     @SuppressLint("NewApi")

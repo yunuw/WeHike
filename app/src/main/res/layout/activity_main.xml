@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
+
        <ImageButton
            android:id="@+id/trails_button"
            android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
             android:src="@drawable/ic_010_post_it"
             android:background="@color/colorTabUnselected"
             android:onClick="showPosts"/>
-
+<!--
         <ImageButton
             android:id="@+id/contacts_button"
             android:layout_width="wrap_content"
@@ -38,7 +39,7 @@
             android:layout_weight="1"
             android:src="@drawable/ic_011_multiple_users_silhouette"
             android:background="@color/colorTabUnselected"
-            android:onClick="showContacts" />
+            android:onClick="showProfile" />-->
 
         <ImageButton
             android:id="@+id/settings_button"
@@ -48,5 +49,6 @@
             android:src="@mipmap/ic_launcher"
             android:background="@color/colorTabUnselected"
             android:onClick="showSettings"/>
+
     </LinearLayout>
 </LinearLayout>
