@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if(intent != null) {
-            int val = intent.getIntExtra(ConversationActivity.BACK_TO_FRAGMENT_KEY, 0);
+            int val = intent.getIntExtra(CreatePostActivity.BACK_TO_FRAGMENT_KEY, 0);
 
-            if (val == ConversationActivity.BACK_TO_FRAGMENT_VALUE) {
+            if (val == CreatePostActivity.BACK_TO_FRAGMENT_VALUE) {
                 openFragmentFromIntent = true;
-                showContacts(findViewById(R.id.contacts_button));
+                showPosts(findViewById(R.id.contacts_button));
             }
         }
 

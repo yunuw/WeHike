@@ -128,7 +128,7 @@ public class PostsFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.title.setText(mValues.get(position).name);
+            //holder.title.setText(mValues.get(position).name);
         }
 
         @Override
