@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.uw.yw239.wehike.ContactsFragment">
+    tools:context="edu.uw.yw239.wehike.ProfileFragment">
 
     <ListView
         android:id="@+id/lv_contacts"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 
 </FrameLayout>

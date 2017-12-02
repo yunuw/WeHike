@@ -1,3 +1,14 @@
 <resources>
-    <string name="title_activity_conversation">ConversationActivity</string>
+    <string name="post_desc_hint">Say something...</string>
+
+    <!-- Strings related to image -->
+    <string name="error_image_uri_null">Failed to get the image</string>
+    <string name="error_image_oversized">The image is too large</string>
+    <string name="error_image_wrong_file_type">Incorrect file type</string>
+    <string name="menu_create_post_label">post</string>
+    <string name="internet_connection_failed">Internet connection failed</string>
+    <string name="warning_empty_image">Please add a image</string>
+    <string name="dialog_empty_image_warning_button">OK</string>
+    <string name="error_create_post_fail">Creating post failed</string>
+
 </resources>

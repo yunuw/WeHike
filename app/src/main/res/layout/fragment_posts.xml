@@ -1,10 +1,9 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:fitsSystemWindows="true"
-tools:context="edu.uw.yw239.wehike.PostsFragment">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="edu.uw.yw239.wehike.ProfileFragment">
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,12 +19,13 @@ tools:context="edu.uw.yw239.wehike.PostsFragment">
         tools:listitem="@layout/posts_list_content" />
 
     <android.support.design.widget.FloatingActionButton
-    android:id="@+id/add_new_post_fab"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="20dp"
-    app:srcCompat="@drawable/ic_add_new_post" />
+        android:id="@+id/add_new_post_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        app:srcCompat="@drawable/ic_add_new_post"
+        android:onClick="onFabClick"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>
 
