@@ -105,17 +105,19 @@ public class PostsFragment extends Fragment {
         postsRecyclerViewAdapter = new PostsRecyclerViewAdapter(postsList);
 
         postsRecyclerView = (RecyclerView)view.findViewById(R.id.posts_list);
+        assert postsRecyclerView != null;
+
         postsLinearManager = new LinearLayoutManager(this.getActivity());
         postsRecyclerView.setLayoutManager(postsLinearManager);
-
-        assert postsRecyclerView != null;
-        setupPostsRecyclerView(postsRecyclerView);
-
-        this.getPosts();
+        postsRecyclerView.setAdapter(postsRecyclerViewAdapter);
 
         return view;
     }
 
+    public void onStart() {
+        this.getPosts();
+        super.onStart();
+    }
 
     private void getPosts() {
         final Resources resources = this.getResources();
@@ -171,11 +173,6 @@ public class PostsFragment extends Fragment {
         );
 
         RequestSingleton.getInstance(this.getContext()).add(request);
-    }
-
-
-    private void setupPostsRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new PostsRecyclerViewAdapter(postsList));
     }
 
     public class PostsRecyclerViewAdapter
