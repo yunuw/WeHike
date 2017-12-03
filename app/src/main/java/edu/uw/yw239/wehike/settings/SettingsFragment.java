@@ -19,6 +19,8 @@ import edu.uw.yw239.wehike.signin.SignInActivity;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
+    public static final String Settings_Fragment_Tag = "Settings_Fragment_Tag";
+
     public SettingsFragment() {
         // Required empty public constructor
     }

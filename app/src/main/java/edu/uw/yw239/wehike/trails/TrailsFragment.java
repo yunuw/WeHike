@@ -42,7 +42,7 @@ import edu.uw.yw239.wehike.common.RequestSingleton;
  * create an instance of this fragment.
  */
 public class TrailsFragment extends Fragment {
-
+    public static final String Trails_Fragment_Tag = "Trails_Fragment_Tag";
     private static final String TAG = "TrailsFrag";
 
     private RecyclerView trailsRecyclerView;

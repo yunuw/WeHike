@@ -19,12 +19,9 @@ import edu.uw.yw239.wehike.trails.TrailsFragment;
  */
 
 public class MainActivity extends AppCompatActivity {
-    private final String Trails_Fragment_Tag = "Trails_Fragment_Tag";
-    private final String Posts_Fragment_Tag = "Posts_Fragment_Tag";
-    private final String Profile_Fragment_Tag = "Profile_Fragment_Tag";
-    private final String Settings_Fragment_Tag = "Settings_Fragment_Tag";
-
     private String selectedFragmentTag = null;
+
+    public static final String FRAGMENT_TO_SELECT_KEY = "FRAGMENT_TO_SELECT_KEY";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +36,18 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if(intent != null) {
-            int val = intent.getIntExtra(CreatePostActivity.BACK_TO_FRAGMENT_KEY, 0);
-
-            if (val == CreatePostActivity.BACK_TO_FRAGMENT_VALUE) {
+            String val = intent.getStringExtra(FRAGMENT_TO_SELECT_KEY);
+            if (val == null) {
+                openFragmentFromIntent = false;
+            }  else if (val.equals(TrailsFragment.Trails_Fragment_Tag)) {
+                openFragmentFromIntent = true;
+                showTrails(findViewById(R.id.trails_button));
+            } else if (val.equals(PostsFragment.Posts_Fragment_Tag)) {
                 openFragmentFromIntent = true;
                 showPosts(findViewById(R.id.posts_button));
+            } else if (val.equals(SettingsFragment.Settings_Fragment_Tag)) {
+                openFragmentFromIntent = true;
+                showSettings(findViewById(R.id.settings_button));
             }
         }
 
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showTrails(View view) {
-        if (this.selectedFragmentTag == Trails_Fragment_Tag) {
+        if (this.selectedFragmentTag == TrailsFragment.Trails_Fragment_Tag) {
             return;
         }
 
@@ -67,14 +71,14 @@ public class MainActivity extends AppCompatActivity {
 
         TrailsFragment fragment = TrailsFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Trails_Fragment_Tag);
+        transaction.replace(R.id.fragment_container, fragment, TrailsFragment.Trails_Fragment_Tag);
         transaction.commit();
 
-        this.selectedFragmentTag = Trails_Fragment_Tag;
+        this.selectedFragmentTag = TrailsFragment.Trails_Fragment_Tag;
     }
 
     public void showPosts(View view) {
-        if (this.selectedFragmentTag == Posts_Fragment_Tag) {
+        if (this.selectedFragmentTag == PostsFragment.Posts_Fragment_Tag) {
             return;
         }
 
@@ -82,13 +86,13 @@ public class MainActivity extends AppCompatActivity {
 
         PostsFragment fragment = PostsFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Posts_Fragment_Tag);
+        transaction.replace(R.id.fragment_container, fragment, PostsFragment.Posts_Fragment_Tag);
         transaction.commit();
-        this.selectedFragmentTag = Posts_Fragment_Tag;
+        this.selectedFragmentTag = PostsFragment.Posts_Fragment_Tag;
     }
 
     public void showSettings(View view) {
-        if (this.selectedFragmentTag == Settings_Fragment_Tag) {
+        if (this.selectedFragmentTag == SettingsFragment.Settings_Fragment_Tag) {
             return;
         }
 
@@ -96,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
 
         SettingsFragment fragment = SettingsFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Settings_Fragment_Tag);
+        transaction.replace(R.id.fragment_container, fragment, SettingsFragment.Settings_Fragment_Tag);
         transaction.commit();
 
-        this.selectedFragmentTag = Settings_Fragment_Tag;
+        this.selectedFragmentTag = SettingsFragment.Settings_Fragment_Tag;
     }
 
     private void setTabsBackgroundColor(View view) {

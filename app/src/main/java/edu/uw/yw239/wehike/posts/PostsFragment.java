@@ -42,6 +42,8 @@ import edu.uw.yw239.wehike.common.RequestSingleton;
  * create an instance of this fragment.
  */
 public class PostsFragment extends Fragment {
+    public static final String Posts_Fragment_Tag = "Posts_Fragment_Tag";
+
     private static final String TAG = "PostsFrag";
 
     private RecyclerView postsRecyclerView;

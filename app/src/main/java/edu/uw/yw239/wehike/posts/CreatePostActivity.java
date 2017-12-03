@@ -54,9 +54,6 @@ import edu.uw.yw239.wehike.common.StorageManager;
  */
 
 public class CreatePostActivity extends AppCompatActivity {
-    public final static String BACK_TO_FRAGMENT_KEY = "back to fragment key";
-    public final static int BACK_TO_FRAGMENT_VALUE = 1;
-
     private ImageView pickedImage;
     private EditText postDesc;
     private ProgressBar imageLoadingProgress;
@@ -334,7 +331,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private void goBack(){
         Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
 
-        intent.putExtra(BACK_TO_FRAGMENT_KEY,BACK_TO_FRAGMENT_VALUE);
+        intent.putExtra(MainActivity.FRAGMENT_TO_SELECT_KEY, PostsFragment.Posts_Fragment_Tag);
         startActivity(intent);
     }
 
