@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -12,8 +14,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,15 +22,29 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.net.URLEncoder;
+
+import edu.uw.yw239.wehike.utils.AccountInfo;
+import edu.uw.yw239.wehike.utils.LocationUtil;
+import edu.uw.yw239.wehike.utils.StorageManager;
 
 /**
  * Created by Nan on 11/28/17.
@@ -202,7 +216,7 @@ public class CreatePostActivity extends AppCompatActivity {
         // Reset errors.
         postDesc.setError(null);
 
-        String description = postDesc.getText().toString().trim();
+        final String description = postDesc.getText().toString().trim();
 
         View focusView = null;
         boolean cancel = false;
@@ -210,9 +224,17 @@ public class CreatePostActivity extends AppCompatActivity {
         if (imageUri == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.warning_empty_image);
-            builder.setPositiveButton(R.string.dialog_empty_image_warning_button, null);
+            builder.setPositiveButton(R.string.dialog_ok_button, null);
             builder.show();
             focusView = pickedImage;
+            cancel = true;
+        }
+        if (description == null || description.equals("")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.warning_empty_description);
+            builder.setPositiveButton(R.string.dialog_ok_button, null);
+            builder.show();
+            focusView = postDesc;
             cancel = true;
         }
 
@@ -228,24 +250,90 @@ public class CreatePostActivity extends AppCompatActivity {
             Post post = new Post();
             post.setDescription(description);
 
-            //// TODO: 11/30/17 set the authentication id for the post and save the post to the database
-            //post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            //postManager.createOrUpdatePostWithImage(imageUri, CreatePostActivity.this, post);
+            imageLoadingProgress.setVisibility(View.VISIBLE);
+            try {
+                StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
+                    public void onUploaded(final String imageUrl) {
+                        try {
+                            LocationUtil.client.getLastLocation().addOnSuccessListener(CreatePostActivity.this, new OnSuccessListener<Location>() {
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        createPost(imageUrl, description, location);
+                                    }
+                                }
+                            });
+                        }
+                        catch (SecurityException ex) {
+                            Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            //todo: add a variable to record whether the post is successfully saved, and handle differently
-            if (true) {
-                setResult(RESULT_OK);
-                CreatePostActivity.this.finish();
-            } else if(false) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                        R.string.error_create_post_fail, Snackbar.LENGTH_LONG);
-                snackbar.show();
+                    public void onFailed(Exception ex) {
+                        Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            finally {
+                imageLoadingProgress.setVisibility(View.GONE);
             }
         } else if (focusView != null) {
             focusView.requestFocus();
         }
     }
 
+    private void createPost(String imageUrl, String description, Location location) {
+        try {
+            String userName = AccountInfo.getCurrentUserName();
+            final Resources resources = this.getResources();
+            final String backendPrefix = resources.getString(R.string.backend_prefix);
+
+
+            // call API and register new user
+            String urlString = String.format("%s/posts/create?userName=%s&imageUrl=%s&description=%s&longitude=%.3f&latitude=%.3f",
+                    backendPrefix, userName, URLEncoder.encode(imageUrl, "UTF-8"), URLEncoder.encode(description, "UTF-8"),
+                    location.getLongitude(), location.getLatitude());
+            Request request = new JsonObjectRequest(Request.Method.POST, urlString, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response)  {
+                            try {
+                                boolean success = response.getBoolean("success");
+
+                                if (success) {
+                                    Toast.makeText(CreatePostActivity.this, "Post created", Toast.LENGTH_LONG).show();
+                                    setResult(RESULT_OK);
+                                    CreatePostActivity.this.finish();
+                                } else {
+                                    String msg = response.getString("message");
+                                    Toast.makeText(CreatePostActivity.this, msg, Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            String errMsg = resources.getString(R.string.error_create_post_fail);
+                            if (error.networkResponse != null) {
+                                errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                            }
+
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), errMsg, Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
+                    }
+            );
+
+            RequestSingleton.getInstance(this).add(request);
+        }
+        catch (SecurityException ex) {
+        }
+        catch (Exception ex) {
+            Toast.makeText(this, "Failed to create post: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+        };
+    }
     private void goBack(){
         Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
 

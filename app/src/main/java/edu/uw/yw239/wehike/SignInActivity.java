@@ -31,13 +31,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Map;
 
-public class SignInActivity extends AppCompatActivity {
-    public static final String CREDENTIAL_FILE_NAME = "credential";
+import edu.uw.yw239.wehike.utils.AccountInfo;
 
+public class SignInActivity extends AppCompatActivity {
     // TODO: replac with the permission that is actually needed
     private static final String[] RequiredPermissions = new String[] {
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.READ_CALENDAR
+        Manifest.permission.READ_CALENDAR,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
     };
 
     // Use the same request code for permission since we don't have special handling for a specific permission
@@ -136,16 +138,12 @@ public class SignInActivity extends AppCompatActivity {
 
     private void openMainActivityIfSignedIn() {
         try {
-            File file = new File(getFilesDir(), CREDENTIAL_FILE_NAME);
-            if(!file.exists()){
+            final String userName = AccountInfo.getCurrentUserName();
+            final String authToken = AccountInfo.getAuthToken();
+
+            if (userName == null || authToken == null) {
                 return;
             }
-
-            FileInputStream fis = openFileInput(CREDENTIAL_FILE_NAME);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            String userName = reader.readLine();
-            final String authToken = reader.readLine();
-            reader.close();
 
             String urlString = String.format("%s/users/verify", backendPrefix);
             Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
@@ -182,20 +180,19 @@ public class SignInActivity extends AppCompatActivity {
             };
 
             RequestSingleton.getInstance(this).add(request);
-        } catch (IOException ioe) {
+        } catch (Exception ioe) {
             Toast.makeText(this, ioe.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     private void saveCredential(String userName, String authToken) {
         try {
-            FileOutputStream fos = openFileOutput(CREDENTIAL_FILE_NAME, MODE_PRIVATE);
+            FileOutputStream fos = openFileOutput(AccountInfo.CREDENTIAL_FILE_NAME, MODE_PRIVATE);
 
             PrintWriter out = new PrintWriter(fos);
             out.println(userName);
             out.println(authToken);
             out.close();
-
         }catch (IOException ioe){
             Toast.makeText(this, ioe.getMessage(), Toast.LENGTH_LONG).show();
         }

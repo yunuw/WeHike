@@ -8,7 +8,8 @@
     <string name="menu_create_post_label">post</string>
     <string name="internet_connection_failed">Internet connection failed</string>
     <string name="warning_empty_image">Please add a image</string>
-    <string name="dialog_empty_image_warning_button">OK</string>
+    <string name="warning_empty_description">Please add description</string>
+    <string name="dialog_ok_button">OK</string>
     <string name="error_create_post_fail">Creating post failed</string>
 
 </resources>

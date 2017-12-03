@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import java.io.File;
 
+import edu.uw.yw239.wehike.utils.AccountInfo;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,10 +55,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void signOut() {
-        File file = new File(this.getActivity().getFilesDir(), SignInActivity.CREDENTIAL_FILE_NAME);
-        if(file.exists()) {
-            file.delete();
-        }
+        AccountInfo.clearAccountInfo();
 
         Intent intent = new Intent(this.getActivity(), SignInActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
