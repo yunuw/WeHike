@@ -255,9 +255,11 @@ public class CreatePostActivity extends AppCompatActivity {
                         try {
                             LocationUtil.client.getLastLocation().addOnSuccessListener(CreatePostActivity.this, new OnSuccessListener<Location>() {
                                 public void onSuccess(Location location) {
-                                    if (location != null) {
-                                        createPost(imageUrl, description, location);
-                                    }
+                                if (location != null) {
+                                    createPost(imageUrl, description, location);
+                                } else {
+                                    Toast.makeText(CreatePostActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                                }
                                 }
                             });
                         }
