@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,8 +83,6 @@ public class PostsFragment extends Fragment {
             mQuery = getArguments().getString(QUERY);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        this.getPosts();
     }
 
     @Override
@@ -111,8 +110,69 @@ public class PostsFragment extends Fragment {
 
         assert postsRecyclerView != null;
         setupPostsRecyclerView(postsRecyclerView);
+
+        this.getPosts();
+
         return view;
     }
+
+
+    private void getPosts() {
+        final Resources resources = this.getResources();
+        final String backendPrefix = resources.getString(R.string.backend_prefix);
+
+        String urlString = String.format("%s/posts/list", backendPrefix);
+        Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response)  {
+                        try {
+                            boolean success = response.getBoolean("success");
+
+                            if (success) {
+                                postsList.clear();
+                                JSONArray jsonPosts = response.getJSONArray("posts");
+                                for (int i = 0; i < jsonPosts.length(); i++) {
+                                    JSONObject jsonPost = jsonPosts.getJSONObject(i);
+
+                                    Post post = new Post();
+                                    post.postId = jsonPost.getInt("postId");
+                                    post.userName = jsonPost.getString("userName");
+                                    post.imageUrl = jsonPost.getString("imageUrl");
+                                    post.description = jsonPost.getString("description");
+                                    post.longitude = jsonPost.getDouble("longitude");
+                                    post.latitude = jsonPost.getDouble("latitude");
+                                    post.timestamp = jsonPost.getString("timestamp");
+
+                                    postsList.add(post);
+
+                                }
+                                postsRecyclerViewAdapter.notifyDataSetChanged();
+                            } else {
+                                String msg = response.getString("message");
+                                Toast.makeText(PostsFragment.this.getContext(), msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(PostsFragment.this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errMsg = resources.getString(R.string.error_create_post_fail);
+                        if (error.networkResponse != null) {
+                            errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                        }
+
+                        Toast.makeText(PostsFragment.this.getContext(), errMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        RequestSingleton.getInstance(this.getContext()).add(request);
+    }
+
 
     private void setupPostsRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new PostsRecyclerViewAdapter(postsList));
@@ -141,7 +201,8 @@ public class PostsFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            //holder.title.setText(mValues.get(position).name);
+            holder.title.setText(mValues.get(position).userName);
+            holder.pic.setImageUrl(mValues.get(position).imageUrl, RequestSingleton.getInstance(getContext()).getImageLoader());
         }
 
         @Override
@@ -154,7 +215,7 @@ public class PostsFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView title;
-            public ImageView pic;
+            public NetworkImageView pic;
             public View mView;
             public Post mItem;
 
@@ -162,7 +223,7 @@ public class PostsFragment extends Fragment {
                 super(view);
                 mView = view;
                 title = (TextView) view.findViewById(R.id.post_name);
-                pic = (ImageView) view.findViewById(R.id.post_image);
+                pic = (NetworkImageView) view.findViewById(R.id.post_image);
             }
 
             @Override
@@ -170,62 +231,5 @@ public class PostsFragment extends Fragment {
                 return super.toString() + " '" + title.getText() + "'";
             }
         }
-    }
-
-    private void addPostClickAction() {
-        //CreatePostActivity
-    }
-
-    private void getPosts() {
-        final Resources resources = this.getResources();
-        final String backendPrefix = resources.getString(R.string.backend_prefix);
-
-        String urlString = String.format("%s/posts/list", backendPrefix);
-        Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response)  {
-                        try {
-                            boolean success = response.getBoolean("success");
-
-                            if (success) {
-                                JSONArray jsonPosts = response.getJSONArray("posts");
-                                for (int i = 0; i < jsonPosts.length(); i++) {
-                                    JSONObject jsonPost = jsonPosts.getJSONObject(i);
-
-                                    Post post = new Post();
-                                    post.postId = jsonPost.getInt("postId");
-                                    post.userName = jsonPost.getString("userName");
-                                    post.imageUrl = jsonPost.getString("imageUrl");
-                                    post.description = jsonPost.getString("description");
-                                    post.longitude = jsonPost.getDouble("longitude");
-                                    post.latitude = jsonPost.getDouble("latitude");
-                                    post.timestamp = jsonPost.getString("timestamp");
-
-                                    postsList.add(post);
-                                }
-                            } else {
-                                String msg = response.getString("message");
-                                Toast.makeText(PostsFragment.this.getContext(), msg, Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(PostsFragment.this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String errMsg = resources.getString(R.string.error_create_post_fail);
-                        if (error.networkResponse != null) {
-                            errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
-                        }
-
-                        Toast.makeText(PostsFragment.this.getContext(), errMsg, Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-
-        RequestSingleton.getInstance(this.getContext()).add(request);
     }
 }

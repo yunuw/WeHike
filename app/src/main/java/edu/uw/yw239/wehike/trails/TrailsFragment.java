@@ -191,6 +191,8 @@ public class TrailsFragment extends Fragment {
         RequestSingleton.getInstance(getContext()).add(mRequest);
     }
 
+
+
     private void setupTrailsRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new TrailsRecyclerViewAdapter(trailsList));
     }
