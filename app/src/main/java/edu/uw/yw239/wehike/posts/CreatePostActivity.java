@@ -70,6 +70,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
         // Hide the tittle
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pickedImage = (ImageView) findViewById(R.id.iv_selected_image);
@@ -328,6 +329,7 @@ public class CreatePostActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to create post: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         };
     }
+
     private void goBack(){
         Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
 
