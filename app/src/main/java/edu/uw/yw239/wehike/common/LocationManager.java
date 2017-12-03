@@ -64,7 +64,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
     public void onConnected(@Nullable Bundle bundle) {
         try {
             fusedLocationProviderApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            Toast.makeText(MyApplication.getContext(), "Google Api Client connection succeeded!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(MyApplication.getContext(), "Google Api Client connection succeeded!", Toast.LENGTH_LONG).show();
         } catch (SecurityException ex) {
             Toast.makeText(MyApplication.getContext(), "Failed to request location " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
