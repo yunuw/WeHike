@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.posts;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -42,15 +42,20 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.URLEncoder;
 
-import edu.uw.yw239.wehike.utils.AccountInfo;
-import edu.uw.yw239.wehike.utils.LocationUtil;
-import edu.uw.yw239.wehike.utils.StorageManager;
+import edu.uw.yw239.wehike.MainActivity;
+import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.AccountInfo;
+import edu.uw.yw239.wehike.common.LocationUtil;
+import edu.uw.yw239.wehike.common.RequestSingleton;
+import edu.uw.yw239.wehike.common.StorageManager;
 
 /**
  * Created by Nan on 11/28/17.
  */
 
 public class CreatePostActivity extends AppCompatActivity {
+    public final static String BACK_TO_FRAGMENT_KEY = "back to fragment key";
+    public final static int BACK_TO_FRAGMENT_VALUE = 1;
 
     private ImageView pickedImage;
     private EditText postDesc;
@@ -60,9 +65,6 @@ public class CreatePostActivity extends AppCompatActivity {
     // todo: change the parameter
     private static final int MAX_IMAGE_SIZE = 10485760;   //10 Mb
     private static final String [] IMAGE_TYPE = new String[]{"jpg", "png", "jpeg", "bmp", "jp2", "psd", "tif", "gif"};
-
-    final static String BACK_TO_FRAGMENT_KEY = "back to fragment key";
-    final static int BACK_TO_FRAGMENT_VALUE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

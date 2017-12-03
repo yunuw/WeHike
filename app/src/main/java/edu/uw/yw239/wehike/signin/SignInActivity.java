@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.signin;
 
 import android.Manifest;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -22,16 +21,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import edu.uw.yw239.wehike.utils.AccountInfo;
+import edu.uw.yw239.wehike.MainActivity;
+import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.AccountInfo;
+import edu.uw.yw239.wehike.common.RequestSingleton;
 
 public class SignInActivity extends AppCompatActivity {
     // TODO: replac with the permission that is actually needed

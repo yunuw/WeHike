@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.signin;
 
 
 import android.app.Dialog;
@@ -23,7 +23,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
+import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.RequestSingleton;
 
 
 /**

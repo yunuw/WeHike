@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.common;
 
 import android.app.Application;
 import android.content.Context;

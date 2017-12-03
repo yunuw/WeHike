@@ -7,6 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import edu.uw.yw239.wehike.posts.CreatePostActivity;
+import edu.uw.yw239.wehike.posts.PostsFragment;
+import edu.uw.yw239.wehike.settings.SettingsFragment;
+import edu.uw.yw239.wehike.trails.TrailsFragment;
+
 /**
  * Created by Yun on 11/12/2017.
  */
@@ -106,13 +111,5 @@ public class MainActivity extends AppCompatActivity {
 
         int selectedColor = getResources().getColor(R.color.colorTabSelected);
         view.setBackgroundColor(selectedColor);
-    }
-
-    // click profile listener
-    public void onClickProfile(View view) {
-        ProfileFragment fragment = edu.uw.yw239.wehike.ProfileFragment.newInstance(null, null);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Profile_Fragment_Tag);
-        transaction.commit();
     }
 }

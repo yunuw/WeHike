@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.posts;
 
 import android.util.Log;
 

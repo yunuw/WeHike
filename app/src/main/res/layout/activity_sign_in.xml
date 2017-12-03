@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/into_page"
-    tools:context="edu.uw.yw239.wehike.SignInActivity">
+    tools:context="edu.uw.yw239.wehike.signin.SignInActivity">
 
     <EditText
         android:id="@+id/input_user_name"

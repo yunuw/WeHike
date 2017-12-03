@@ -1,12 +1,9 @@
-package edu.uw.yw239.wehike.utils;
+package edu.uw.yw239.wehike.common;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-
-import edu.uw.yw239.wehike.MyApplication;
-import edu.uw.yw239.wehike.SignInActivity;
 
 /**
  * Created by Yun on 12/3/2017.

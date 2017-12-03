@@ -1,8 +1,6 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.trails;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -31,7 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.R.attr.radius;
+import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.RequestSingleton;
 
 
 /**

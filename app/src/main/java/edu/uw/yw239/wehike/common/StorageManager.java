@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike.utils;
+package edu.uw.yw239.wehike.common;
 
 import android.net.Uri;
 import android.os.Handler;
@@ -18,8 +18,6 @@ import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
-
-import edu.uw.yw239.wehike.MyApplication;
 
 /**
  * Created by Yun on 12/2/2017.

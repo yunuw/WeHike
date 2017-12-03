@@ -1,4 +1,4 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.settings;
 
 
 import android.content.Intent;
@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.File;
-
-import edu.uw.yw239.wehike.utils.AccountInfo;
+import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.AccountInfo;
+import edu.uw.yw239.wehike.signin.SignInActivity;
 
 
 /**

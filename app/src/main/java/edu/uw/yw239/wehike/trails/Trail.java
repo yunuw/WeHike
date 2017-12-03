@@ -1,18 +1,14 @@
-package edu.uw.yw239.wehike;
+package edu.uw.yw239.wehike.trails;
 
 import android.util.Log;
-import android.webkit.URLUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by wangchen on 11/27/17.
