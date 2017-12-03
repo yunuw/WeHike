@@ -3,9 +3,11 @@ package edu.uw.yw239.wehike.posts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +16,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.RequestSingleton;
 
 
 /**
@@ -69,7 +83,7 @@ public class PostsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
+        this.getPosts();
     }
 
     @Override
@@ -162,4 +176,56 @@ public class PostsFragment extends Fragment {
         //CreatePostActivity
     }
 
+    private void getPosts() {
+        final Resources resources = this.getResources();
+        final String backendPrefix = resources.getString(R.string.backend_prefix);
+
+        String urlString = String.format("%s/posts/list", backendPrefix);
+        Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response)  {
+                        try {
+                            boolean success = response.getBoolean("success");
+
+                            if (success) {
+                                JSONArray jsonPosts = response.getJSONArray("posts");
+                                for (int i = 0; i < jsonPosts.length(); i++) {
+                                    JSONObject jsonPost = jsonPosts.getJSONObject(i);
+
+                                    Post post = new Post();
+                                    post.postId = jsonPost.getInt("postId");
+                                    post.userName = jsonPost.getString("userName");
+                                    post.imageUrl = jsonPost.getString("imageUrl");
+                                    post.description = jsonPost.getString("description");
+                                    post.longitude = jsonPost.getDouble("longitude");
+                                    post.latitude = jsonPost.getDouble("latitude");
+                                    post.timestamp = jsonPost.getString("timestamp");
+
+                                    postsList.add(post);
+                                }
+                            } else {
+                                String msg = response.getString("message");
+                                Toast.makeText(PostsFragment.this.getContext(), msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(PostsFragment.this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errMsg = resources.getString(R.string.error_create_post_fail);
+                        if (error.networkResponse != null) {
+                            errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                        }
+
+                        Toast.makeText(PostsFragment.this.getContext(), errMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        RequestSingleton.getInstance(this.getContext()).add(request);
+    }
 }

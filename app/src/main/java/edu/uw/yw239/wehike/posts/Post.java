@@ -15,14 +15,12 @@ import java.util.List;
  */
 
 public class Post {
-    private String description;
-    private long createdDate;
-
-    public Post(){
-        this.createdDate = new Date().getTime();
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public int postId;
+    public String userName;
+    public String imageUrl;
+    public String description;
+    public double longitude;
+    public double latitude;
+    // TODO: change to Date type if it's needed
+    public String timestamp;
 }

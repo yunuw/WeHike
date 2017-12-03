@@ -248,10 +248,6 @@ public class CreatePostActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-            //// TODO: 11/30/17 save the post and go back to the post fragment
-            Post post = new Post();
-            post.setDescription(description);
-
             imageLoadingProgress.setVisibility(View.VISIBLE);
             try {
                 StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
