@@ -45,7 +45,7 @@ import java.net.URLEncoder;
 import edu.uw.yw239.wehike.MainActivity;
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.AccountInfo;
-import edu.uw.yw239.wehike.common.LocationUtil;
+import edu.uw.yw239.wehike.common.LocationManager;
 import edu.uw.yw239.wehike.common.RequestSingleton;
 import edu.uw.yw239.wehike.common.StorageManager;
 
@@ -253,15 +253,12 @@ public class CreatePostActivity extends AppCompatActivity {
                 StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
                     public void onUploaded(final String imageUrl) {
                         try {
-                            LocationUtil.client.getLastLocation().addOnSuccessListener(CreatePostActivity.this, new OnSuccessListener<Location>() {
-                                public void onSuccess(Location location) {
-                                if (location != null) {
-                                    createPost(imageUrl, description, location);
-                                } else {
-                                    Toast.makeText(CreatePostActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
-                                }
-                                }
-                            });
+                            Location location = LocationManager.getInstance().getLocation();
+                            if (location != null) {
+                                createPost(imageUrl, description, location);
+                            } else {
+                                Toast.makeText(CreatePostActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         catch (SecurityException ex) {
                             Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();

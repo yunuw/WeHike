@@ -1,12 +1,14 @@
 package edu.uw.yw239.wehike;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import edu.uw.yw239.wehike.common.LocationManager;
 import edu.uw.yw239.wehike.posts.CreatePostActivity;
 import edu.uw.yw239.wehike.posts.PostsFragment;
 import edu.uw.yw239.wehike.settings.SettingsFragment;
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Get the location manager asap the app start
+        LocationManager locManager = LocationManager.getInstance();
 
         boolean openFragmentFromIntent = false;
 
@@ -51,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-
-
     }
 
     public void showTrails(View view) {
