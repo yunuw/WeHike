@@ -4,12 +4,169 @@
     android:layout_height="match_parent"
     tools:context="edu.uw.yw239.wehike.settings.SettingsFragment">
 
-    <Button android:id="@+id/sign_out"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_profile_photo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/default_profile_image" />
+
+        <LinearLayout
+            android:id="@+id/profile_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sign_out_btn_text"
+            android:layout_marginTop="60dp"
+            android:layout_toRightOf="@id/iv_profile_photo"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="User Name"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/et_profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="test name"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profile_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_profile_photo"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="Phone Number"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/et_profile_phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center|left"
+                android:text="test phone number"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profile_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_phone"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="Email"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/et_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center|left"
+                android:text="test email"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profile_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_email"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="Facebook"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/et_profile_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center|left"
+                android:text="test facebook"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profile_twitter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_facebook"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="Twitter"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/et_profile_twitter"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center|left"
+                android:text="test twitter"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_twitter"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:onClick="signOut"
-            android:layout_marginTop="20dp">
-    </Button>
+            android:text="@string/sign_out_btn_text"></Button>
+
+    </RelativeLayout>
+
 
 </FrameLayout>

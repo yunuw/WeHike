@@ -11,5 +11,6 @@
     <string name="warning_empty_description">Please add description</string>
     <string name="dialog_ok_button">OK</string>
     <string name="error_create_post_fail">Creating post failed</string>
+    <string name="menu_settings_label">edit</string>
 
 </resources>

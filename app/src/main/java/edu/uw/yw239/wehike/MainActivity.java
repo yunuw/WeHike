@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import edu.uw.yw239.wehike.common.LocationManager;
 import edu.uw.yw239.wehike.posts.CreatePostActivity;
 import edu.uw.yw239.wehike.posts.PostsFragment;
+import edu.uw.yw239.wehike.profile.EditProfileActivity;
 import edu.uw.yw239.wehike.settings.SettingsFragment;
 import edu.uw.yw239.wehike.trails.TrailsFragment;
 
