@@ -5,9 +5,10 @@ package edu.uw.yw239.wehike.posts;
  */
 
 public class Comment {
-    private String commentId;
-    private String commentText;
-    private String userId;
-    private long createdDate;
+    public int commentId;
+    public String commentText;
+    public String userName;
+    public String timestamp;
+    public String imageUrl;
 
 }
