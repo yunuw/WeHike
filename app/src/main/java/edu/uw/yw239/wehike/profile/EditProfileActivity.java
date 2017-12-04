@@ -43,12 +43,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Button cancelButton;
     private Uri imageUri;
 
-    private String userName;
-    private String phoneNum;
-    private String email;
-    private String facebookUrl;
-    private String twitterUrl;
-
+    private Profile profile;
 
     private static final int MAX_IMAGE_SIZE = 10485760;   //10 Mb
     private static final String [] IMAGE_TYPE = new String[]{"jpg", "png", "jpeg", "bmp", "jp2", "psd", "tif", "gif"};
@@ -83,11 +78,11 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Save the updated profile data to the dataset
                 //// TODO: 12/3/17
-                userName = editUserName.getText().toString().trim();
-                phoneNum = editPhoneNum.getText().toString().trim();
-                email = editEmail.getText().toString().trim();
-                facebookUrl = editFacebookUrl.getText().toString().trim();
-                twitterUrl = editTwitterUrl.getText().toString().trim();
+                profile.userName = editUserName.getText().toString().trim();
+                profile.phoneNumber = editPhoneNum.getText().toString().trim();
+                profile.email = editEmail.getText().toString().trim();
+                profile.facebookUrl = editFacebookUrl.getText().toString().trim();
+                profile.twitterUrl = editTwitterUrl.getText().toString().trim();
 
                 attemptSaveProfile();
             }
