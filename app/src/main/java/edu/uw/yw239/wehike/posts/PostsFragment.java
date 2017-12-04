@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.RequestSingleton;
@@ -48,6 +53,7 @@ public class PostsFragment extends Fragment {
     private LinearLayoutManager postsLinearManager;
     private PostsRecyclerViewAdapter postsRecyclerViewAdapter;
     private List<Post> postsList;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -119,6 +125,8 @@ public class PostsFragment extends Fragment {
         super.onStart();
     }
 
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
     private void getPosts() {
         final Resources resources = this.getResources();
         final String backendPrefix = resources.getString(R.string.backend_prefix);
@@ -145,6 +153,14 @@ public class PostsFragment extends Fragment {
                                     post.longitude = jsonPost.getDouble("longitude");
                                     post.latitude = jsonPost.getDouble("latitude");
                                     post.timestamp = jsonPost.getString("timestamp");
+                                    /*
+                                    try {
+                                        String postDateString = jsonPost.getString("timestamp");
+                                        if(!postDateString.equals("null"))
+                                            post.postDate = formatter.parse(postDateString).getTime();
+                                    } catch (ParseException e) {
+                                        Log.e(TAG, "Error parsing date", e); //Android log the error
+                                    }*/
 
                                     postsList.add(post);
 
@@ -200,6 +216,9 @@ public class PostsFragment extends Fragment {
             holder.mItem = mValues.get(position);
             holder.title.setText(mValues.get(position).userName);
             holder.pic.setImageUrl(mValues.get(position).imageUrl, RequestSingleton.getInstance(getContext()).getImageLoader());
+            holder.postText.setText(mValues.get(position).description);
+            holder.postDate.setText(mValues.get(position).timestamp);
+
         }
 
         @Override
@@ -212,6 +231,8 @@ public class PostsFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView title;
+            public TextView postText;
+            public TextView postDate;
             public NetworkImageView pic;
             public View mView;
             public Post mItem;
@@ -221,6 +242,8 @@ public class PostsFragment extends Fragment {
                 mView = view;
                 title = (TextView) view.findViewById(R.id.post_name);
                 pic = (NetworkImageView) view.findViewById(R.id.post_image);
+                postText = (TextView) view.findViewById(R.id.post_description);
+                postDate = (TextView) view.findViewById(R.id.post_date);
             }
 
             @Override

@@ -23,4 +23,5 @@ public class Post {
     public double latitude;
     // TODO: change to Date type if it's needed
     public String timestamp;
+
 }
