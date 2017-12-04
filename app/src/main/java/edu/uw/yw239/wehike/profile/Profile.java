@@ -6,7 +6,7 @@ package edu.uw.yw239.wehike.profile;
 
 public class Profile {
     public String imageUrl;
-    public String name;
+    public String userName;
     public String phoneNumber;
     public String email;
     public String facebookUrl;

@@ -27,7 +27,6 @@ import edu.uw.yw239.wehike.posts.CreatePostActivity;
 import edu.uw.yw239.wehike.profile.EditProfileActivity;
 import edu.uw.yw239.wehike.signin.SignInActivity;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingsFragment#newInstance} factory method to
