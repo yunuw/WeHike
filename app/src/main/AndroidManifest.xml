@@ -30,7 +30,6 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -41,8 +40,12 @@
             android:name=".trails.TrailsDetailActivity"></activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
-        <activity android:name=".posts.CreatePostActivity" />
-        <activity android:name=".profile.EditProfileActivity"></activity>
+        <activity
+            android:name=".posts.CreatePostActivity"></activity>
+        <activity
+            android:name=".posts.PostDetailActivity"></activity>
+        <activity
+            android:name=".profile.EditProfileActivity"></activity>
     </application>
 
 </manifest>

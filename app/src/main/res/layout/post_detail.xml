@@ -12,20 +12,32 @@
         android:id="@+id/activity_post_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="80dp">
+        android:paddingBottom="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/post_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/lalala"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/post_image"
+            android:layout_marginTop="15dp"
+            android:textSize="18dp"
+            android:text="Comments:" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/commentsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@+id/post_image"
+            android:layout_below="@+id/lalala"
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/comment_list_item" />
 
@@ -36,11 +48,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/commentEditText"
-            android:layout_width="250dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"

@@ -18,6 +18,7 @@ public class Post {
     public int postId;
     public String userName;
     public String imageUrl;
+    public String userImageUrl;
     public String description;
     public double longitude;
     public double latitude;
