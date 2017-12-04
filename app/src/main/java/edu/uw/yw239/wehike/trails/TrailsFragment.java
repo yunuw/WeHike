@@ -39,6 +39,7 @@ import edu.uw.yw239.wehike.common.LocationManager;
 import edu.uw.yw239.wehike.common.RequestSingleton;
 
 import static android.R.attr.description;
+import static android.R.attr.value;
 
 
 /**
@@ -92,6 +93,7 @@ public class TrailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mQuery = getArguments().getString(QUERY);
 //            fetchTrails(mQuery,45.1,-122.15);
@@ -108,12 +110,21 @@ public class TrailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trails, container, false);
 
+        if (savedInstanceState != null && savedInstanceState.containsKey("searchTerm")){
+            String q = savedInstanceState.getString("searchTerm");
+            fetchTrails(q,0.0,0.0);
+        }
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.maps);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                view.setVisibility(View.INVISIBLE);
+                searchEditText = (EditText)getActivity().findViewById(R.id.seachText);
+                String q = searchEditText.getText().toString();
                 Intent intent = new Intent(getActivity(), MapsActivity.class);
+                Log.v(TAG, ""+trailsList);
+                intent.putExtra("trailsSearchTerm",q);
                 startActivity(intent);
             }
         });
@@ -139,15 +150,15 @@ public class TrailsFragment extends Fragment {
         trailsLinearManager = new LinearLayoutManager(this.getActivity());
         trailsRecyclerView.setLayoutManager(trailsLinearManager);
 
-
         assert trailsRecyclerView != null;
 
         trailsRecyclerView.setAdapter(trailsRecyclerViewAdapter);
 
 //        setupTrailsRecyclerView(trailsRecyclerView);
         curLocation = LocationManager.getInstance().getLocation();
+        Log.v(TAG, curLocation+"hahahahah");
 
-        fetchTrails("",46.0,-122.15);
+        fetchTrails("",47.6535,-122.3077);
         return view;
 
     }
@@ -195,12 +206,6 @@ public class TrailsFragment extends Fragment {
             }
         };
         RequestSingleton.getInstance(getContext()).add(mRequest);
-    }
-
-
-
-    private void setupTrailsRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new TrailsRecyclerViewAdapter(trailsList));
     }
 
 
@@ -278,4 +283,14 @@ public class TrailsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        EditText seach = (EditText)getActivity().findViewById(R.id.seachText);
+        String q = seach.getText().toString();
+        outState.putString("seachTerm",q);
+        Log.v("hahahahahahha",outState+"");
+
+        //Save the fragment's state here
+    }
 }
