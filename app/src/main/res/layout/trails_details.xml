@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/theTrailName"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="9dp"
+        android:layout_marginVertical="9dp"
+        android:text="Activities:"
+        android:textSize="24dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trails_details_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/theTrailName"
+        android:scrollbars="vertical"
+        tools:context="edu.uw.yw239.wehike.MainActivity"
+        tools:listitem="@layout/trails_details_list_content"
+        />
+
+
+
+</LinearLayout>
