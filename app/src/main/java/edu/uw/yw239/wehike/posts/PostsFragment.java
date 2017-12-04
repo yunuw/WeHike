@@ -39,6 +39,7 @@ import java.util.Objects;
 
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.RequestSingleton;
+import static edu.uw.yw239.wehike.posts.PostDetailActivity.POST_ID_KEY;
 
 
 /**
@@ -228,7 +229,7 @@ public class PostsFragment extends Fragment {
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, PostDetailActivity.class);
-                    //intent.putExtra(holder.mItem.postId);
+                    intent.putExtra(POST_ID_KEY, holder.mItem.postId);
                     context.startActivity(intent);
                 }
 
