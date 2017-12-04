@@ -127,7 +127,7 @@ public class PostsFragment extends Fragment {
         super.onStart();
     }
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
 
     private void getPosts() {
         final Resources resources = this.getResources();
@@ -151,18 +151,13 @@ public class PostsFragment extends Fragment {
                                     post.postId = jsonPost.getInt("postId");
                                     post.userName = jsonPost.getString("userName");
                                     post.imageUrl = jsonPost.getString("imageUrl");
+                                    post.userImageUrl = jsonPost.getString("userPhotoUrl");
                                     post.description = jsonPost.getString("description");
                                     post.longitude = jsonPost.getDouble("longitude");
                                     post.latitude = jsonPost.getDouble("latitude");
-                                    post.timestamp = jsonPost.getString("timestamp");
-                                    /*
-                                    try {
-                                        String postDateString = jsonPost.getString("timestamp");
-                                        if(!postDateString.equals("null"))
-                                            post.postDate = formatter.parse(postDateString).getTime();
-                                    } catch (ParseException e) {
-                                        Log.e(TAG, "Error parsing date", e); //Android log the error
-                                    }*/
+
+                                    Long postDateLong = jsonPost.getLong("timestamp");
+                                    post.timestamp = formatter.format(postDateLong);
 
                                     postsList.add(post);
 
@@ -218,8 +213,26 @@ public class PostsFragment extends Fragment {
             holder.mItem = mValues.get(position);
             holder.title.setText(mValues.get(position).userName);
             holder.pic.setImageUrl(mValues.get(position).imageUrl, RequestSingleton.getInstance(getContext()).getImageLoader());
+
             holder.postText.setText(mValues.get(position).description);
             holder.postDate.setText(mValues.get(position).timestamp);
+
+            if (holder.userpic != null) {
+                holder.userpic.setImageUrl(mValues.get(position).userImageUrl, RequestSingleton.getInstance(getContext()).getImageLoader());
+            } else {
+                holder.userpic.setDefaultImageResId(R.mipmap.ic_profile_picture);
+            }
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, PostDetailActivity.class);
+                    //intent.putExtra(holder.mItem.postId);
+                    context.startActivity(intent);
+                }
+
+            });
 
         }
 
@@ -236,6 +249,7 @@ public class PostsFragment extends Fragment {
             public TextView postText;
             public TextView postDate;
             public NetworkImageView pic;
+            public NetworkImageView userpic;
             public View mView;
             public Post mItem;
 
@@ -244,6 +258,7 @@ public class PostsFragment extends Fragment {
                 mView = view;
                 title = (TextView) view.findViewById(R.id.post_name);
                 pic = (NetworkImageView) view.findViewById(R.id.post_image);
+                userpic = (NetworkImageView) view.findViewById(R.id.user_image);
                 postText = (TextView) view.findViewById(R.id.post_description);
                 postDate = (TextView) view.findViewById(R.id.post_date);
             }
