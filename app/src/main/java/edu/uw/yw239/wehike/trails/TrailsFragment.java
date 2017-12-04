@@ -158,7 +158,7 @@ public class TrailsFragment extends Fragment {
         curLocation = LocationManager.getInstance().getLocation();
         Log.v(TAG, curLocation+"hahahahah");
 
-        fetchTrails("",47.6535,-122.3077);
+        fetchTrails("",curLocation.getLatitude(),curLocation.getLongitude());
         return view;
 
     }
