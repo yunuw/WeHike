@@ -15,6 +15,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
             android:src="@mipmap/default_profile_image" />
 
         <LinearLayout
@@ -69,6 +70,7 @@
             android:gravity="center|left"
             android:text="test phone number"
             android:textColor="#000000" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -97,6 +99,7 @@
             android:gravity="center|left"
             android:text="test email"
             android:textColor="#000000" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -125,6 +128,7 @@
             android:gravity="center|left"
             android:text="test facebook"
             android:textColor="#000000" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -153,13 +157,35 @@
             android:gravity="center|left"
             android:text="test twitter"
             android:textColor="#000000" />
+
     </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_dial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="callNumber"
+            android:text="Call"
+            android:layout_below="@id/profile_twitter"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"/>
+
+        <Button
+            android:id="@+id/btn_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:layout_below="@id/btn_dial"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"/>
 
         <Button
             android:id="@+id/add_friend_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_twitter"
+            android:layout_below="@id/btn_email"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"

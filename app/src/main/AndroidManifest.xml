@@ -47,7 +47,13 @@
             android:label="My Profile" ></activity>
         <activity
             android:name=".profile.ProfileActivity"
-            android:label="Profile"></activity>
+            android:label="Profile">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
