@@ -2,11 +2,17 @@ package edu.uw.yw239.wehike.profile;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.Image;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +60,9 @@ public class ProfileActivity extends AppCompatActivity {
         userTwitterUrl = (TextView)findViewById(R.id.et_user_twitter);
 
         userPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
+        Button callButton = (Button)findViewById(R.id.btn_dial);
+        Button emailButton = (Button)findViewById(R.id.btn_email);
+
 
         profile = new Profile();
 
@@ -63,6 +72,20 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         getProfile();
+
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callNumber(v);
+            }
+        });
+
+        emailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail(v);
+            }
+        });
     }
 
 
@@ -148,5 +171,40 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public void callNumber(View v) {
+        //Implicit Intent
+        //Action Data
+        Intent intent = new Intent(Intent.ACTION_DIAL);//intent with an action
+
+        if(profile.phoneNumber != null) {
+            intent.setData(Uri.parse("tel:" + profile.phoneNumber));
+        }
+        else {
+            Toast.makeText(this, "No phone number", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //check for a target
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void sendEmail(View v){
+
+        if(profile.email != null) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + profile.email));
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        }
+        else {
+            Toast.makeText(this, "No email", Toast.LENGTH_LONG).show();
+            return;
+        }
+
     }
 }
