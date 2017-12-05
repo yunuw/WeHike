@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/iv_profile_photo"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -23,26 +23,27 @@
             android:layout_marginTop="60dp"
             android:layout_toRightOf="@id/iv_profile_photo"
             android:orientation="vertical">
-
+<!--
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center|left"
                 android:text="User Name"
-                android:textColor="#000000" />
+                android:textColor="#000000" />-->
 
             <TextView
                 android:id="@+id/et_profile_name"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center|left"
-                android:text="test name"
+                android:text="User name"
+                android:textSize="30dp"
                 android:textColor="#000000" />
         </LinearLayout>
 
-        <LinearLayout
+<!--        <LinearLayout
             android:id="@+id/profile_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -152,19 +153,63 @@
                 android:gravity="center|left"
                 android:text="test twitter"
                 android:textColor="#000000" />
-        </LinearLayout>
+        </LinearLayout>-->
+
+        <Button
+            android:id="@+id/edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_profile_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/edit_profile_btn_text"></Button>
+
+        <Button
+            android:id="@+id/my_posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/my_posts_btn_text"></Button>
+
+        <Button
+            android:id="@+id/my_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_posts"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/my_friends_btn_text"></Button>
 
         <Button
             android:id="@+id/sign_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_twitter"
+            android:layout_below="@id/my_friends"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:onClick="signOut"
             android:text="@string/sign_out_btn_text"></Button>
+
+        <Button
+            android:id="@+id/app_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sign_out"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/app_settings_btn_text"></Button>
 
     </RelativeLayout>
 

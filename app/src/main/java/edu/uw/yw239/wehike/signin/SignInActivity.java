@@ -164,9 +164,11 @@ public class SignInActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(SignInActivity.this,
-                                    "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data),
-                                    Toast.LENGTH_LONG).show();
+                            String errMsg = "Failed to sign in.\n";
+                            if (error.networkResponse != null) {
+                                errMsg += "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                            }
+                            Toast.makeText(SignInActivity.this, errMsg, Toast.LENGTH_LONG).show();
                         }
                     }
             ) {

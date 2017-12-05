@@ -13,6 +13,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Yun on 12/3/2017.
@@ -48,6 +49,10 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(1000);
+
+        location = new Location("cur");
+        location.setLatitude(47.6550);
+        location.setLongitude(-122.3080);
 
         fusedLocationProviderApi = LocationServices.FusedLocationApi;
         googleApiClient = new GoogleApiClient.Builder(MyApplication.getContext())

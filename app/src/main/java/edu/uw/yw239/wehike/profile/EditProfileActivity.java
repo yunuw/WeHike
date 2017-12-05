@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -24,17 +31,24 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.net.URLEncoder;
 
 import edu.uw.yw239.wehike.MainActivity;
 import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.AccountInfo;
+import edu.uw.yw239.wehike.common.MyApplication;
+import edu.uw.yw239.wehike.common.RequestSingleton;
 import edu.uw.yw239.wehike.common.StorageManager;
 import edu.uw.yw239.wehike.settings.SettingsFragment;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private ImageView pfPhoto;
-    private EditText editUserName;
+    private NetworkImageView pfPhoto;
+    private TextView tvUserName;
     private EditText editPhoneNum;
     private EditText editEmail;
     private EditText editFacebookUrl;
@@ -43,12 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Button cancelButton;
     private Uri imageUri;
 
-    private String userName;
-    private String phoneNum;
-    private String email;
-    private String facebookUrl;
-    private String twitterUrl;
-
+    private Profile profile;
 
     private static final int MAX_IMAGE_SIZE = 10485760;   //10 Mb
     private static final String [] IMAGE_TYPE = new String[]{"jpg", "png", "jpeg", "bmp", "jp2", "psd", "tif", "gif"};
@@ -60,8 +69,8 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        pfPhoto = (ImageView) findViewById(R.id.iv_edit_profile_photo);
-        editUserName = (EditText) findViewById(R.id.et_edit_profile_name);
+        pfPhoto = (NetworkImageView) findViewById(R.id.iv_edit_profile_photo);
+        tvUserName = (TextView) findViewById(R.id.et_edit_profile_user_name);
         editPhoneNum = (EditText) findViewById(R.id.et_edit_profile_phone);
         editEmail = (EditText) findViewById(R.id.et_edit_profile_email);
         editFacebookUrl = (EditText) findViewById(R.id.et_edit_profile_facebook);
@@ -69,6 +78,12 @@ public class EditProfileActivity extends AppCompatActivity {
         saveButton = (Button) findViewById(R.id.save_edit);
         cancelButton = (Button) findViewById(R.id.cancel_edit);
         imageLoadingProgress = (ProgressBar) findViewById(R.id.pb_photo_loading);
+
+        pfPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
+
+        profile = new Profile();
+        profile.userName = AccountInfo.getCurrentUserName();
+        tvUserName.setText(profile.userName);
 
         pfPhoto.setOnClickListener(new View.OnClickListener(){
 
@@ -82,14 +97,33 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Save the updated profile data to the dataset
-                //// TODO: 12/3/17
-                userName = editUserName.getText().toString().trim();
-                phoneNum = editPhoneNum.getText().toString().trim();
-                email = editEmail.getText().toString().trim();
-                facebookUrl = editFacebookUrl.getText().toString().trim();
-                twitterUrl = editTwitterUrl.getText().toString().trim();
+                profile.phoneNumber = editPhoneNum.getText().toString().trim();
+                profile.email = editEmail.getText().toString().trim();
+                profile.facebookUrl = editFacebookUrl.getText().toString().trim();
+                profile.twitterUrl = editTwitterUrl.getText().toString().trim();
 
-                attemptSaveProfile();
+                if (imageUri == null
+                        && profile.phoneNumber.equals("")
+                        && profile.email.equals("")
+                        && profile.facebookUrl.equals("")
+                        && profile.twitterUrl.equals("")) {
+                    Toast.makeText(EditProfileActivity.this, "Nothing to update", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // TODO: Set the value to space (" ") when it's empty string, otherwise server will return bad request as it doesn't understand the URL
+                // which looks like http://address/query?param1=&param2=, that missed values after "="
+                profile.phoneNumber = profile.phoneNumber.equals("") ? " " : profile.phoneNumber;
+                profile.email = profile.email.equals("") ? " " : profile.email;
+                profile.facebookUrl = profile.facebookUrl.equals("") ? " " : profile.facebookUrl;
+                profile.twitterUrl = profile.twitterUrl.equals("") ? " " : profile.twitterUrl;
+
+                if(imageUri != null) {
+                    attemptSaveProfile();
+                }
+                else{
+                    updateProfile(null, profile.phoneNumber, profile.email, profile.facebookUrl, profile.twitterUrl);
+                }
             }
         });
 
@@ -103,6 +137,58 @@ public class EditProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        getProfile();
+    }
+
+    private void getProfile() {
+        profile.userName = AccountInfo.getCurrentUserName();
+        final Resources resources = this.getResources();
+        final String backendPrefix = resources.getString(R.string.backend_prefix);
+
+        String urlString = String.format("%s/users/get?userName=%s", backendPrefix, profile.userName);
+        Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response)  {
+                        try{
+                            profile.email = response.getString("email");
+                            profile.imageUrl = response.getString("photoUrl");
+                            profile.phoneNumber = response.getString("phoneNumber");
+                            profile.facebookUrl = response.getString("facebookUrl");
+                            profile.twitterUrl = response.getString("twitterUrl");
+
+                            if(profile.imageUrl != null && profile.imageUrl != "") {
+                                pfPhoto.setImageUrl(profile.imageUrl, RequestSingleton.getInstance(MyApplication.getContext()).getImageLoader());
+                            }
+                            else {
+                                pfPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
+                            }
+                            tvUserName.setText(profile.userName);
+                            editPhoneNum.setText(profile.phoneNumber);
+                            editEmail.setText(profile.email);
+                            editFacebookUrl.setText(profile.facebookUrl);
+                            editTwitterUrl.setText(profile.twitterUrl);
+
+                        }catch (JSONException e) {
+                            Toast.makeText(MyApplication.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errMsg = "Failed to get profile";
+                        if (error.networkResponse != null) {
+                            errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                        }
+
+                        Toast.makeText(MyApplication.getContext(), errMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        RequestSingleton.getInstance(this).add(request);
     }
 
     @SuppressLint("NewApi")
@@ -225,7 +311,7 @@ public class EditProfileActivity extends AppCompatActivity {
             StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
                 public void onUploaded(final String imageUrl) {
                     try {
-                        //createProfile(imageUrl, name, phoneNum, email, facebookUrl, twitterUrl);
+                        updateProfile(imageUrl, profile.phoneNumber, profile.email, profile.facebookUrl, profile.twitterUrl);
                     }
                     catch (SecurityException ex) {
                         Toast.makeText(EditProfileActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -241,41 +327,42 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    /*private void createProfile(String imageUrl, String name, String phoneNum, String email, String facebookUrl, String twitterUrl) {
+    private void updateProfile(String imageUrl, String phoneNum, String email, String facebookUrl, String twitterUrl) {
         try {
-            String userName = AccountInfo.getCurrentUserName();
             final Resources resources = this.getResources();
             final String backendPrefix = resources.getString(R.string.backend_prefix);
-
+            String urlString;
 
             // call API and store profile info
-            String urlString = String.format("%s/posts/create?userName=%s&imageUrl=%s&description=%s&longitude=%.3f&latitude=%.3f",
-                    backendPrefix, userName, URLEncoder.encode(imageUrl, "UTF-8"), URLEncoder.encode(description, "UTF-8"),
-                    location.getLongitude(), location.getLatitude());
-            Request request = new JsonObjectRequest(Request.Method.POST, urlString, null,
+            if(imageUrl != null) {
+                urlString = String.format("%s/users/update?userName=%s&photoUrl=%s&phoneNumber=%s&email=%s&facebookUrl=%s&twitterUrl=%s",
+                        backendPrefix, profile.userName, URLEncoder.encode(imageUrl, "UTF-8"), URLEncoder.encode(profile.phoneNumber, "UTF-8"),
+                        URLEncoder.encode(profile.email, "UTF-8"), URLEncoder.encode(profile.facebookUrl, "UTF-8"),
+                        URLEncoder.encode(profile.twitterUrl, "UTF-8"));
+            }
+            else{
+                urlString = String.format("%s/users/update?userName=%s&phoneNumber=%s&email=%s&facebookUrl=%s&twitterUrl=%s",
+                        backendPrefix, profile.userName, URLEncoder.encode(profile.phoneNumber, "UTF-8"),
+                        URLEncoder.encode(profile.email, "UTF-8"), URLEncoder.encode(profile.facebookUrl, "UTF-8"),
+                        URLEncoder.encode(profile.twitterUrl, "UTF-8"));
+            }
+            Request request = new JsonObjectRequest(Request.Method.PUT, urlString, null,
                     new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONObject response)  {
-                            try {
-                                boolean success = response.getBoolean("success");
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(EditProfileActivity.this, "Profile successfully updated", Toast.LENGTH_LONG).show();
 
-                                if (success) {
-                                    Toast.makeText(EditProfileActivity.this, "Profile saved", Toast.LENGTH_LONG).show();
-                                    setResult(RESULT_OK);
-                                    EditProfileActivity.this.finish();
-                                } else {
-                                    String msg = response.getString("message");
-                                    Toast.makeText(EditProfileActivity.this, msg, Toast.LENGTH_LONG).show();
-                                }
-                            } catch (JSONException e) {
-                                Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
+                            // Go back to the settings fragment
+                            Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
+
+                            intent.putExtra(MainActivity.FRAGMENT_TO_SELECT_KEY, SettingsFragment.Settings_Fragment_Tag);
+                            startActivity(intent);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            String errMsg = resources.getString(R.string.error_create_post_fail);
+                            String errMsg = "Update profile failed";
                             if (error.networkResponse != null) {
                                 errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
                             }
@@ -294,5 +381,5 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to save profile: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         };
     }
-    */
+
 }
