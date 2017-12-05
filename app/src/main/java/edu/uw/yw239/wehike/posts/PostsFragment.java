@@ -39,6 +39,8 @@ import java.util.Objects;
 
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.RequestSingleton;
+import edu.uw.yw239.wehike.profile.ProfileActivity;
+
 import static edu.uw.yw239.wehike.posts.PostDetailActivity.POST_ID_KEY;
 
 
@@ -235,6 +237,15 @@ public class PostsFragment extends Fragment {
 
             });
 
+            holder.userpic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    String userName = holder.title.getText().toString().trim();
+                    intent.putExtra(ProfileActivity.USER_NAME_KEY, userName);
+                    getActivity().startActivity(intent);
+                }
+            });
         }
 
         @Override
