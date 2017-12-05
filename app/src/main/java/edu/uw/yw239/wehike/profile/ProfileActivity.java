@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,10 +20,12 @@ import com.android.volley.toolbox.NetworkImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.yw239.wehike.MainActivity;
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.AccountInfo;
 import edu.uw.yw239.wehike.common.MyApplication;
 import edu.uw.yw239.wehike.common.RequestSingleton;
+import edu.uw.yw239.wehike.posts.PostsFragment;
 import edu.uw.yw239.wehike.trails.TrailsFragment;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -39,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         userPhoto = (NetworkImageView)findViewById(R.id.iv_user_photo);
         userName = (TextView)findViewById(R.id.et_user_name);
@@ -108,5 +114,39 @@ public class ProfileActivity extends AppCompatActivity {
         );
 
         RequestSingleton.getInstance(this).add(request);
+    }
+
+
+    private void goBack(){
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+
+        intent.putExtra(MainActivity.FRAGMENT_TO_SELECT_KEY, PostsFragment.Posts_Fragment_Tag);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        goBack();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                goBack();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 }
