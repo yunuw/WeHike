@@ -5,6 +5,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,15 +17,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.AccountInfo;
 import edu.uw.yw239.wehike.common.MyApplication;
+import edu.uw.yw239.wehike.common.RequestSingleton;
 import edu.uw.yw239.wehike.posts.CreatePostActivity;
+import edu.uw.yw239.wehike.posts.Post;
+import edu.uw.yw239.wehike.posts.PostsFragment;
 import edu.uw.yw239.wehike.profile.EditProfileActivity;
+import edu.uw.yw239.wehike.profile.Profile;
 import edu.uw.yw239.wehike.signin.SignInActivity;
 
 /**
@@ -35,12 +50,14 @@ import edu.uw.yw239.wehike.signin.SignInActivity;
 public class SettingsFragment extends Fragment {
     public static final String Settings_Fragment_Tag = "Settings_Fragment_Tag";
 
-    private ImageView pfPhoto;
-    private EditText name;
-    private EditText phoneNum;
-    private EditText email;
-    private EditText facebookUrl;
-    private EditText twitterUrl;
+    private NetworkImageView pfPhoto;
+    private TextView name;
+    private TextView phoneNum;
+    private TextView email;
+    private TextView facebookUrl;
+    private TextView twitterUrl;
+
+    private Profile profile;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -59,16 +76,6 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        //// TODO: 12/3/17 set imageview and textview after getting the data from the database
-
-        pfPhoto = (ImageView) getActivity().findViewById(R.id.iv_profile_photo);
-        name = (EditText) getActivity().findViewById(R.id.et_profile_name);
-        phoneNum = (EditText) getActivity().findViewById(R.id.et_profile_phone);
-        email = (EditText) getActivity().findViewById(R.id.et_profile_email);
-        facebookUrl = (EditText) getActivity().findViewById(R.id.et_profile_facebook);
-        twitterUrl = (EditText) getActivity().findViewById(R.id.et_profile_twitter);
-
     }
 
     @Override
@@ -78,6 +85,18 @@ public class SettingsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         View signOutButton = root.findViewById(R.id.sign_out);
+
+        pfPhoto = (NetworkImageView) root.findViewById(R.id.iv_profile_photo);
+        name = (TextView) root.findViewById(R.id.et_profile_name);
+        phoneNum = (TextView) root.findViewById(R.id.et_profile_phone);
+        email = (TextView) root.findViewById(R.id.et_profile_email);
+        facebookUrl = (TextView) root.findViewById(R.id.et_profile_facebook);
+        twitterUrl = (TextView) root.findViewById(R.id.et_profile_twitter);
+
+        pfPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
+
+        profile = new Profile();
+        getProfile();
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +105,56 @@ public class SettingsFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void getProfile() {
+        profile.userName = AccountInfo.getCurrentUserName();
+        final Resources resources = this.getResources();
+        final String backendPrefix = resources.getString(R.string.backend_prefix);
+
+        String urlString = String.format("%s/users/get?userName=%s", backendPrefix, profile.userName);
+        Request request = new JsonObjectRequest(Request.Method.GET, urlString, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response)  {
+                        try{
+                            profile.email = response.getString("email");
+                            profile.imageUrl = response.getString("photoUrl");
+                            profile.phoneNumber = response.getString("phoneNumber");
+                            profile.facebookUrl = response.getString("facebookUrl");
+                            profile.twitterUrl = response.getString("twitterUrl");
+
+                            if(profile.imageUrl != null && profile.imageUrl != "null" && profile.imageUrl != "") {
+                                pfPhoto.setImageUrl(profile.imageUrl, RequestSingleton.getInstance(MyApplication.getContext()).getImageLoader());
+                            }
+                            else{
+                                pfPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
+                            }
+                            name.setText(profile.userName);
+                            phoneNum.setText(profile.phoneNumber);
+                            email.setText(profile.email);
+                            facebookUrl.setText(profile.facebookUrl);
+                            twitterUrl.setText(profile.twitterUrl);
+
+                        }catch (JSONException e) {
+                            Toast.makeText(MyApplication.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errMsg = "Failed to get profile";
+                        if (error.networkResponse != null) {
+                            errMsg = errMsg + "\n" + "Status code: " + error.networkResponse.statusCode + "\n" + new String(error.networkResponse.data);
+                        }
+
+                        Toast.makeText(MyApplication.getContext(), errMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        RequestSingleton.getInstance(this.getContext()).add(request);
     }
 
     private void signOut() {
@@ -115,14 +184,4 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    public void saveProfile(){
-        pfPhoto = (ImageView) getActivity().findViewById(R.id.iv_profile_photo);
-        name = (EditText) getActivity().findViewById(R.id.et_profile_name);
-        phoneNum = (EditText) getActivity().findViewById(R.id.et_profile_phone);
-        email = (EditText) getActivity().findViewById(R.id.et_profile_email);
-        facebookUrl = (EditText) getActivity().findViewById(R.id.et_profile_facebook);
-        twitterUrl = (EditText) getActivity().findViewById(R.id.et_profile_twitter);
-
-
-    }
 }
