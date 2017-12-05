@@ -43,9 +43,11 @@
         <activity
             android:name=".posts.PostDetailActivity"></activity>
         <activity
-            android:name=".profile.EditProfileActivity"></activity>
+            android:name=".profile.EditProfileActivity"
+            android:label="My Profile" ></activity>
         <activity
-            android:name=".profile.ProfileActivity"></activity>
+            android:name=".profile.ProfileActivity"
+            android:label="Profile"></activity>
     </application>
 
 </manifest>
