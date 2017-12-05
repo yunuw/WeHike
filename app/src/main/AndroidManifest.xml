@@ -30,7 +30,6 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,16 +41,24 @@
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6230daca41768b3b1cd1bfc4cf449d62fcc7e9
         <activity
             android:name=".posts.CreatePostActivity"></activity>
         <activity
             android:name=".posts.PostDetailActivity"></activity>
+<<<<<<< HEAD
 
 =======
         <activity android:name=".posts.CreatePostActivity" />
         <activity android:name=".profile.EditProfileActivity"></activity>
 >>>>>>> ac0e75d12b95895a0fd51d7c0d7df58b92a61f63
+=======
+        <activity
+            android:name=".profile.EditProfileActivity"></activity>
+>>>>>>> 6d6230daca41768b3b1cd1bfc4cf449d62fcc7e9
     </application>
 
 </manifest>
