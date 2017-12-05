@@ -62,6 +62,8 @@ public class PostDetailActivity extends AppCompatActivity{
     public static final String POST_ID_KEY = "ARG_PARAM_KEY";
     int postId = -1;
     String imageUrl = " ";
+    String postAuthor = " ";
+    String postDesc = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +127,17 @@ public class PostDetailActivity extends AppCompatActivity{
                                 commentsList.clear();
                                 JSONArray jsonComments = response.getJSONArray("comments");
                                 JSONObject jsonPostObject = response.getJSONObject("postInfo");
+
                                 NetworkImageView imageView = (NetworkImageView) findViewById(R.id.post_image);
                                 imageUrl = jsonPostObject.getString("imageUrl");
                                 imageView.setImageUrl(imageUrl, RequestSingleton.getInstance(getApplicationContext()).getImageLoader());
+
+                                TextView textViewName = (TextView) findViewById(R.id.post_detail_name);
+                                TextView textViewDesc = (TextView) findViewById(R.id.post_detail_text);
+                                postAuthor = jsonPostObject.getString("userName");
+                                postDesc = jsonPostObject.getString("description");
+                                textViewName.setText(postAuthor + ": ");
+                                textViewDesc.setText(postDesc);
 
                                 for (int i = 0; i < jsonComments.length(); i++) {
                                     JSONObject jsonPost = jsonComments.getJSONObject(i);
