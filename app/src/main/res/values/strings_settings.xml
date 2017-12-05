@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sign_out_btn_text">Sign Out</string>
+    <string name="my_friends_btn_text">My friends</string>
+    <string name="my_posts_btn_text">My posts</string>
+    <string name="edit_profile_btn_text">Edit profile</string>
+    <string name="app_settings_btn_text">Settings</string>
 </resources>

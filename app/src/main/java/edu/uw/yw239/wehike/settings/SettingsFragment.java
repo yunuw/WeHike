@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -85,13 +86,10 @@ public class SettingsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         View signOutButton = root.findViewById(R.id.sign_out);
+        Button editProfileButton = root.findViewById(R.id.edit_profile);
 
         pfPhoto = (NetworkImageView) root.findViewById(R.id.iv_profile_photo);
         name = (TextView) root.findViewById(R.id.et_profile_name);
-        phoneNum = (TextView) root.findViewById(R.id.et_profile_phone);
-        email = (TextView) root.findViewById(R.id.et_profile_email);
-        facebookUrl = (TextView) root.findViewById(R.id.et_profile_facebook);
-        twitterUrl = (TextView) root.findViewById(R.id.et_profile_twitter);
 
         pfPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
 
@@ -101,6 +99,14 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 signOut();
+            }
+        });
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -118,11 +124,7 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response)  {
                         try{
-                            profile.email = response.getString("email");
                             profile.imageUrl = response.getString("photoUrl");
-                            profile.phoneNumber = response.getString("phoneNumber");
-                            profile.facebookUrl = response.getString("facebookUrl");
-                            profile.twitterUrl = response.getString("twitterUrl");
 
                             if(profile.imageUrl != null && profile.imageUrl != "null" && profile.imageUrl != "") {
                                 pfPhoto.setImageUrl(profile.imageUrl, RequestSingleton.getInstance(MyApplication.getContext()).getImageLoader());
@@ -131,10 +133,6 @@ public class SettingsFragment extends Fragment {
                                 pfPhoto.setDefaultImageResId(R.mipmap.default_profile_image);
                             }
                             name.setText(profile.userName);
-                            phoneNum.setText(profile.phoneNumber);
-                            email.setText(profile.email);
-                            facebookUrl.setText(profile.facebookUrl);
-                            twitterUrl.setText(profile.twitterUrl);
 
                         }catch (JSONException e) {
                             Toast.makeText(MyApplication.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -163,25 +161,6 @@ public class SettingsFragment extends Fragment {
         Intent intent = new Intent(this.getActivity(), SignInActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_settings, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.menu_settings :
-
-                // go to the edit profile activity
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 }

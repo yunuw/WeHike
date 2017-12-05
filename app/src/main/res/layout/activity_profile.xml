@@ -155,6 +155,17 @@
             android:textColor="#000000" />
     </LinearLayout>
 
+        <Button
+            android:id="@+id/add_friend_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_twitter"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/add_friend_request_btn_text"></Button>
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
