@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uw.yw239.wehike.MainActivity;
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.AccountInfo;
 import edu.uw.yw239.wehike.common.LocationManager;
@@ -55,10 +57,13 @@ public class PostDetailActivity extends AppCompatActivity{
     private CommentsRecyclerViewAdapter commentsRecyclerViewAdapter;
     private List<Comment> commentsList;
     private EditText commentText;
+    private static final String TAG = "PostDetailActivity";
 
     public static final String POST_ID_KEY = "ARG_PARAM_KEY";
     int postId = -1;
     String imageUrl = " ";
+    String postAuthor = " ";
+    String postDesc = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,11 @@ public class PostDetailActivity extends AppCompatActivity{
         Intent intent = getIntent();
         postId = intent.getIntExtra(POST_ID_KEY, -1);
         commentText = (EditText) findViewById(R.id.commentEditText);
+
+        // Hide the tittle
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Button btn = (Button) findViewById(R.id.button_send_comment);
         btn.setOnClickListener(new Button.OnClickListener() {
@@ -117,9 +127,17 @@ public class PostDetailActivity extends AppCompatActivity{
                                 commentsList.clear();
                                 JSONArray jsonComments = response.getJSONArray("comments");
                                 JSONObject jsonPostObject = response.getJSONObject("postInfo");
+
                                 NetworkImageView imageView = (NetworkImageView) findViewById(R.id.post_image);
                                 imageUrl = jsonPostObject.getString("imageUrl");
                                 imageView.setImageUrl(imageUrl, RequestSingleton.getInstance(getApplicationContext()).getImageLoader());
+
+                                TextView textViewName = (TextView) findViewById(R.id.post_detail_name);
+                                TextView textViewDesc = (TextView) findViewById(R.id.post_detail_text);
+                                postAuthor = jsonPostObject.getString("userName");
+                                postDesc = jsonPostObject.getString("description");
+                                textViewName.setText(postAuthor + ": ");
+                                textViewDesc.setText(postDesc);
 
                                 for (int i = 0; i < jsonComments.length(); i++) {
                                     JSONObject jsonPost = jsonComments.getJSONObject(i);
@@ -299,7 +317,33 @@ public class PostDetailActivity extends AppCompatActivity{
         };
     }
 
+    private void goBack(){
+        Intent intent = new Intent(PostDetailActivity.this, MainActivity.class);
 
+        intent.putExtra(MainActivity.FRAGMENT_TO_SELECT_KEY, PostsFragment.Posts_Fragment_Tag);
+        startActivity(intent);
+    }
 
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        goBack();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                goBack();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
 
 }
