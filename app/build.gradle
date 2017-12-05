@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "edu.uw.yw239.wehike"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -27,10 +27,14 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
-    compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:recyclerview-v7:26.+'
-    compile 'com.android.support:cardview-v7:26.0.+'
+    compile 'com.android.support:cardview-v7:26.+'
     compile 'com.android.support:design:26.+'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.google.android.gms:play-services-location:11.0.4'
+    compile 'com.microsoft.azure.android:azure-storage-android:2.0.0@aar'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
     testCompile 'junit:junit:4.12'
 }

@@ -1,34 +1,70 @@
 package edu.uw.yw239.wehike;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import edu.uw.yw239.wehike.common.LocationManager;
+import edu.uw.yw239.wehike.posts.CreatePostActivity;
+import edu.uw.yw239.wehike.posts.PostsFragment;
+import edu.uw.yw239.wehike.profile.EditProfileActivity;
+import edu.uw.yw239.wehike.settings.SettingsFragment;
+import edu.uw.yw239.wehike.trails.TrailsFragment;
+
 /**
  * Created by Yun on 11/12/2017.
  */
 
 public class MainActivity extends AppCompatActivity {
-    private final String Trails_Fragment_Tag = "Trails_Fragment_Tag";
-    private final String Posts_Fragment_Tag = "Posts_Fragment_Tag";
-    private final String Contacts_Fragment_Tag = "Contacts_Fragment_Tag";
-    private final String Settings_Fragment_Tag = "Settings_Fragment_Tag";
-
     private String selectedFragmentTag = null;
+
+    public static final String FRAGMENT_TO_SELECT_KEY = "FRAGMENT_TO_SELECT_KEY";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: test whether we need to restore the selected tab when it got switched from other activities
-        ImageButton showTrailsButton = (ImageButton)findViewById(R.id.trails_button);
-        showTrails(showTrailsButton);
+        // Get the location manager asap the app start
+        LocationManager locManager = LocationManager.getInstance();
+
+        boolean openFragmentFromIntent = false;
+
+        // Set up the back stack from CreatePostActivity
+        Intent intent = getIntent();
+
+        if(intent != null) {
+            String val = intent.getStringExtra(FRAGMENT_TO_SELECT_KEY);
+            if (val == null) {
+                openFragmentFromIntent = false;
+            }  else if (val.equals(TrailsFragment.Trails_Fragment_Tag)) {
+                openFragmentFromIntent = true;
+                showTrails(findViewById(R.id.trails_button));
+            } else if (val.equals(PostsFragment.Posts_Fragment_Tag)) {
+                openFragmentFromIntent = true;
+                showPosts(findViewById(R.id.posts_button));
+            } else if (val.equals(SettingsFragment.Settings_Fragment_Tag)) {
+                openFragmentFromIntent = true;
+                showSettings(findViewById(R.id.settings_button));
+            }
+        }
+
+        if(openFragmentFromIntent == false){
+            ImageButton showTrailsButton = (ImageButton)findViewById(R.id.trails_button);
+            showTrails(showTrailsButton);
+        }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
     }
 
     public void showTrails(View view) {
-        if (this.selectedFragmentTag == Trails_Fragment_Tag) {
+        if (this.selectedFragmentTag == TrailsFragment.Trails_Fragment_Tag) {
             return;
         }
 
@@ -36,14 +72,14 @@ public class MainActivity extends AppCompatActivity {
 
         TrailsFragment fragment = TrailsFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Trails_Fragment_Tag);
+        transaction.replace(R.id.fragment_container, fragment, TrailsFragment.Trails_Fragment_Tag);
         transaction.commit();
 
-        this.selectedFragmentTag = Trails_Fragment_Tag;
+        this.selectedFragmentTag = TrailsFragment.Trails_Fragment_Tag;
     }
 
     public void showPosts(View view) {
-        if (this.selectedFragmentTag == Posts_Fragment_Tag) {
+        if (this.selectedFragmentTag == PostsFragment.Posts_Fragment_Tag) {
             return;
         }
 
@@ -51,28 +87,13 @@ public class MainActivity extends AppCompatActivity {
 
         PostsFragment fragment = PostsFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Posts_Fragment_Tag);
+        transaction.replace(R.id.fragment_container, fragment, PostsFragment.Posts_Fragment_Tag);
         transaction.commit();
-        this.selectedFragmentTag = Posts_Fragment_Tag;
-    }
-
-    public void showContacts(View view) {
-        if (this.selectedFragmentTag == Contacts_Fragment_Tag) {
-            return;
-        }
-
-        setTabsBackgroundColor(view);
-
-        ContactsFragment fragment = ContactsFragment.newInstance(null, null);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Contacts_Fragment_Tag);
-        transaction.commit();
-
-        this.selectedFragmentTag = Contacts_Fragment_Tag;
+        this.selectedFragmentTag = PostsFragment.Posts_Fragment_Tag;
     }
 
     public void showSettings(View view) {
-        if (this.selectedFragmentTag == Settings_Fragment_Tag) {
+        if (this.selectedFragmentTag == SettingsFragment.Settings_Fragment_Tag) {
             return;
         }
 
@@ -80,22 +101,20 @@ public class MainActivity extends AppCompatActivity {
 
         SettingsFragment fragment = SettingsFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, Settings_Fragment_Tag);
+        transaction.replace(R.id.fragment_container, fragment, SettingsFragment.Settings_Fragment_Tag);
         transaction.commit();
 
-        this.selectedFragmentTag = Settings_Fragment_Tag;
+        this.selectedFragmentTag = SettingsFragment.Settings_Fragment_Tag;
     }
 
     private void setTabsBackgroundColor(View view) {
         ImageButton showTrailsButton = (ImageButton)findViewById(R.id.trails_button);
         ImageButton showPostsButton = (ImageButton)findViewById(R.id.posts_button);
-        ImageButton showContactsButton = (ImageButton)findViewById(R.id.contacts_button);
         ImageButton showSettingsButton = (ImageButton)findViewById(R.id.settings_button);
 
         int unselectedColor = getResources().getColor(R.color.colorTabUnselected);
         showTrailsButton.setBackgroundColor(unselectedColor);
         showPostsButton.setBackgroundColor(unselectedColor);
-        showContactsButton.setBackgroundColor(unselectedColor);
         showSettingsButton.setBackgroundColor(unselectedColor);
 
         int selectedColor = getResources().getColor(R.color.colorTabSelected);

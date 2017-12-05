@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="30dp"
-    tools:context="edu.uw.yw239.wehike.SignUpDiaglog">
+    tools:context="edu.uw.yw239.wehike.signin.SignUpDiaglog">
 
     <RelativeLayout
         android:layout_width="wrap_content"

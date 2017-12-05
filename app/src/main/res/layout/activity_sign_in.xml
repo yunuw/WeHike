@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/signin_background"
-    tools:context="edu.uw.yw239.wehike.SignInActivity">
+    android:background="@drawable/into_page"
+    tools:context="edu.uw.yw239.wehike.signin.SignInActivity">
 
     <EditText
         android:id="@+id/input_user_name"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/sign_in_btn_text"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/sign_up"
+        android:layout_centerVertical="true"
         android:background="@drawable/sign_in_btn"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -51,12 +51,12 @@
         android:onClick="signIn" />
 
     <Button
-        android:id="@id/sign_up"
+        android:id="@+id/sign_up"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:text="@string/sign_up_btn_text"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/find_pwd"
+        android:layout_below="@+id/sign_in"
         android:background="@drawable/sign_up_btn"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -64,12 +64,12 @@
         android:onClick="openSignUpDialog"/>
 
     <Button
-        android:id="@id/find_pwd"
+        android:id="@+id/find_pwd"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:text="@string/find_pwd_btn_text"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/sign_up"
         android:layout_marginBottom="10dp"
         android:background="@drawable/find_password_btn"
         android:textColor="#FFFFFF"

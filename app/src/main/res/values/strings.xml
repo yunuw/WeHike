@@ -1,0 +1,16 @@
+<resources>
+    <string name="post_desc_hint">Say something...</string>
+
+    <!-- Strings related to image -->
+    <string name="error_image_uri_null">Failed to get the image</string>
+    <string name="error_image_oversized">The image is too large</string>
+    <string name="error_image_wrong_file_type">Incorrect file type</string>
+    <string name="menu_create_post_label">post</string>
+    <string name="internet_connection_failed">Internet connection failed</string>
+    <string name="warning_empty_image">Please add a image</string>
+    <string name="warning_empty_description">Please add description</string>
+    <string name="dialog_ok_button">OK</string>
+    <string name="error_create_post_fail">Creating post failed</string>
+    <string name="menu_settings_label">edit</string>
+
+</resources>

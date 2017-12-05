@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.uw.yw239.wehike.profile.EditProfileActivity">
+
+    <ProgressBar
+        android:id="@+id/pb_photo_loading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/iv_edit_profile_photo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:src="@mipmap/default_profile_image" />
+
+    <LinearLayout
+        android:id="@+id/edit_profile_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_edit_profile_photo"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="User Name"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/et_edit_profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_profile_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_profile_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="Phone Number"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/et_edit_profile_phone"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_profile_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_profile_phone"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="Email"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/et_edit_profile_email"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_profile_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_profile_email"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="Facebook"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/et_edit_profile_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_profile_twitter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_profile_facebook"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="Twitter"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/et_edit_profile_twitter"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/edit_profile_twitter"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+
+        <Button
+            android:id="@+id/save_edit"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:onClick="saveEdit"
+            android:layout_marginLeft="8dp"
+            android:gravity="center"
+            android:text="save"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/cancel_edit"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:onClick="cancelEdit"
+            android:text="cancel"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
