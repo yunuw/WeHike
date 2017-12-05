@@ -1,10 +1,8 @@
 package edu.uw.yw239.wehike.posts;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -30,19 +28,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.yw239.wehike.R;
 import edu.uw.yw239.wehike.common.AccountInfo;
-import edu.uw.yw239.wehike.common.LocationManager;
-import edu.uw.yw239.wehike.common.MyApplication;
 import edu.uw.yw239.wehike.common.RequestSingleton;
-import edu.uw.yw239.wehike.common.StorageManager;
-import edu.uw.yw239.wehike.signin.SignInActivity;
-import edu.uw.yw239.wehike.signin.SignUpDiaglog;
 
 /**
  * Created by Nan on 12/3/17.

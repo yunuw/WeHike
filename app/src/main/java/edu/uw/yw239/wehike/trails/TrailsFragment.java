@@ -1,6 +1,8 @@
 package edu.uw.yw239.wehike.trails;
 
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
@@ -29,8 +33,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.uw.yw239.wehike.MainActivity;
 import edu.uw.yw239.wehike.R;
+import edu.uw.yw239.wehike.common.LocationManager;
 import edu.uw.yw239.wehike.common.RequestSingleton;
+
+import static android.R.attr.description;
 
 
 /**
@@ -45,6 +53,7 @@ public class TrailsFragment extends Fragment {
     public static final String Trails_Fragment_Tag = "Trails_Fragment_Tag";
     private static final String TAG = "TrailsFrag";
 
+    private Location curLocation;
     private RecyclerView trailsRecyclerView;
     private LinearLayoutManager trailsLinearManager;
     private TrailsRecyclerViewAdapter trailsRecyclerViewAdapter;
@@ -89,7 +98,7 @@ public class TrailsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     }
 
@@ -104,6 +113,8 @@ public class TrailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 //                view.setVisibility(View.INVISIBLE);
+                Intent intent = new Intent(getActivity(), MapsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -131,19 +142,14 @@ public class TrailsFragment extends Fragment {
 
         assert trailsRecyclerView != null;
 
-        setupTrailsRecyclerView(trailsRecyclerView);
+        trailsRecyclerView.setAdapter(trailsRecyclerViewAdapter);
 
+//        setupTrailsRecyclerView(trailsRecyclerView);
+        curLocation = LocationManager.getInstance().getLocation();
 
         fetchTrails("",46.0,-122.15);
         return view;
 
-    }
-
-    public void search_btn_clicked(){
-        searchEditText = (EditText)getActivity().findViewById(R.id.seachText);
-        String q = searchEditText.getText().toString();
-        Log.v("what is the q?", q);
-        fetchTrails(q, 0.0,0.0);
     }
 
     public void fetchTrails(String q, Double lat, Double lon){
@@ -235,24 +241,9 @@ public class TrailsFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (mTwoPane) {
-//
-//                        Bundle arguments = new Bundle();
-//                        arguments.putString(NewsArticleDetailFragment.ARG_ITEM_ID, holder.mItem.headline);
-//                        arguments.putParcelable(NewsArticleDetailFragment.ARG_ITEM_ID,holder.mItem);
-//                        NewsArticleDetailFragment fragment = new NewsArticleDetailFragment();
-//                        fragment.setArguments(arguments);
-//                        getSupportFragmentManager().beginTransaction()
-//                                .replace(R.id.newsarticle_detail_container, fragment)
-//                                .commit();
-//                    } else {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, NewsArticleDetailActivity.class);
-//
-//                        intent.putExtra(NewsArticleDetailFragment.ARG_ITEM_ID, holder.mItem);
-//
-//                        context.startActivity(intent);
-//                    }
+                    Intent intent = new Intent(getActivity(), TrailsDetailActivity.class);
+                    intent.putExtra("trails details",holder.mItem);
+                    startActivity(intent);
                     Log.v(TAG, "Trail Item clicked");
                 }
             });

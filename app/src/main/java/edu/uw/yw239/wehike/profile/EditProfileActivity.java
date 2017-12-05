@@ -1,83 +1,76 @@
-package edu.uw.yw239.wehike.posts;
+package edu.uw.yw239.wehike.profile;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.net.URLEncoder;
 
 import edu.uw.yw239.wehike.MainActivity;
 import edu.uw.yw239.wehike.R;
-import edu.uw.yw239.wehike.common.AccountInfo;
-import edu.uw.yw239.wehike.common.LocationManager;
-import edu.uw.yw239.wehike.common.RequestSingleton;
 import edu.uw.yw239.wehike.common.StorageManager;
+import edu.uw.yw239.wehike.settings.SettingsFragment;
 
-/**
- * Created by Nan on 11/28/17.
- */
+public class EditProfileActivity extends AppCompatActivity {
 
-public class CreatePostActivity extends AppCompatActivity {
-    private ImageView pickedImage;
-    private EditText postDesc;
-    private ProgressBar imageLoadingProgress;
+    private ImageView pfPhoto;
+    private EditText editUserName;
+    private EditText editPhoneNum;
+    private EditText editEmail;
+    private EditText editFacebookUrl;
+    private EditText editTwitterUrl;
+    private Button saveButton;
+    private Button cancelButton;
     private Uri imageUri;
 
-    // todo: change the parameter
+    private String userName;
+    private String phoneNum;
+    private String email;
+    private String facebookUrl;
+    private String twitterUrl;
+
+
     private static final int MAX_IMAGE_SIZE = 10485760;   //10 Mb
     private static final String [] IMAGE_TYPE = new String[]{"jpg", "png", "jpeg", "bmp", "jp2", "psd", "tif", "gif"};
+
+    private ProgressBar imageLoadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_post);
+        setContentView(R.layout.activity_edit_profile);
 
-        // Hide the tittle
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        pfPhoto = (ImageView) findViewById(R.id.iv_edit_profile_photo);
+        editUserName = (EditText) findViewById(R.id.et_edit_profile_name);
+        editPhoneNum = (EditText) findViewById(R.id.et_edit_profile_phone);
+        editEmail = (EditText) findViewById(R.id.et_edit_profile_email);
+        editFacebookUrl = (EditText) findViewById(R.id.et_edit_profile_facebook);
+        editTwitterUrl = (EditText) findViewById(R.id.et_edit_profile_twitter);
+        saveButton = (Button) findViewById(R.id.save_edit);
+        cancelButton = (Button) findViewById(R.id.cancel_edit);
+        imageLoadingProgress = (ProgressBar) findViewById(R.id.pb_photo_loading);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        pickedImage = (ImageView) findViewById(R.id.iv_selected_image);
-        postDesc = (EditText) findViewById(R.id.et_post_desc);
-        imageLoadingProgress = (ProgressBar) findViewById(R.id.pb_image_loading);
-
-        pickedImage.setOnClickListener(new View.OnClickListener(){
+        pfPhoto.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -85,24 +78,31 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
 
-        // Set up the hint status for post description
-        //postDesc.setHint(getResources().getString(R.string.post_desc_hint));
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Save the updated profile data to the dataset
+                //// TODO: 12/3/17
+                userName = editUserName.getText().toString().trim();
+                phoneNum = editPhoneNum.getText().toString().trim();
+                email = editEmail.getText().toString().trim();
+                facebookUrl = editFacebookUrl.getText().toString().trim();
+                twitterUrl = editTwitterUrl.getText().toString().trim();
 
-        postDesc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus)
-                    postDesc.setHint(getResources().getString(R.string.post_desc_hint));
-                else
-                    postDesc.setHint("");
+                attemptSaveProfile();
             }
         });
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Go back to the settings fragment
+                Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
 
-    }
-
-    public void onResume(){
-        postDesc.setHint(getResources().getString(R.string.post_desc_hint));
-        super.onResume();
+                intent.putExtra(MainActivity.FRAGMENT_TO_SELECT_KEY, SettingsFragment.Settings_Fragment_Tag);
+                startActivity(intent);
+            }
+        });
     }
 
     @SuppressLint("NewApi")
@@ -136,6 +136,7 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
+
     protected boolean isImageFileValid(Uri imageUri) {
         boolean result = false;
         int message = R.string.error_image_uri_null;
@@ -165,7 +166,6 @@ public class CreatePostActivity extends AppCompatActivity {
         return result;
     }
 
-    // Check whether the uri is a image
     public static boolean isImageUri(Uri uri, Context context) {
         String mType = context.getContentResolver().getType(uri);
 
@@ -209,81 +209,46 @@ public class CreatePostActivity extends AppCompatActivity {
                         return false;
                     }
                 })
-                .into(pickedImage);
+                .into(pfPhoto);
     }
 
-    protected void attemptCreatePost() {
-        // Reset errors.
-        postDesc.setError(null);
-
-        final String description = postDesc.getText().toString().trim();
-
-        View focusView = null;
-        boolean cancel = false;
-
-        if (imageUri == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.warning_empty_image);
-            builder.setPositiveButton(R.string.dialog_ok_button, null);
-            builder.show();
-            focusView = pickedImage;
-            cancel = true;
-        }
-        if (description == null || description.equals("")) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.warning_empty_description);
-            builder.setPositiveButton(R.string.dialog_ok_button, null);
-            builder.show();
-            focusView = postDesc;
-            cancel = true;
+    protected void attemptSaveProfile() {
+        // Hide the keyboard
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        if (!cancel) {
-            // Hide the keyboard
-            View view = this.getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-
-            imageLoadingProgress.setVisibility(View.VISIBLE);
-            try {
-                StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
-                    public void onUploaded(final String imageUrl) {
-                        try {
-                            Location location = LocationManager.getInstance().getLocation();
-                            if (location != null) {
-                                createPost(imageUrl, description, location);
-                            } else {
-                                Toast.makeText(CreatePostActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        catch (SecurityException ex) {
-                            Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+        imageLoadingProgress.setVisibility(View.VISIBLE);
+        try {
+            StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
+                public void onUploaded(final String imageUrl) {
+                    try {
+                        //createProfile(imageUrl, name, phoneNum, email, facebookUrl, twitterUrl);
                     }
-
-                    public void onFailed(Exception ex) {
-                        Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    catch (SecurityException ex) {
+                        Toast.makeText(EditProfileActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
-            }
-            finally {
-                imageLoadingProgress.setVisibility(View.GONE);
-            }
-        } else if (focusView != null) {
-            focusView.requestFocus();
+                }
+                public void onFailed(Exception ex) {
+                    Toast.makeText(EditProfileActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        finally {
+            imageLoadingProgress.setVisibility(View.GONE);
         }
     }
 
-    private void createPost(String imageUrl, String description, Location location) {
+    /*private void createProfile(String imageUrl, String name, String phoneNum, String email, String facebookUrl, String twitterUrl) {
         try {
             String userName = AccountInfo.getCurrentUserName();
             final Resources resources = this.getResources();
             final String backendPrefix = resources.getString(R.string.backend_prefix);
 
 
-            // call API and register new user
+            // call API and store profile info
             String urlString = String.format("%s/posts/create?userName=%s&imageUrl=%s&description=%s&longitude=%.3f&latitude=%.3f",
                     backendPrefix, userName, URLEncoder.encode(imageUrl, "UTF-8"), URLEncoder.encode(description, "UTF-8"),
                     location.getLongitude(), location.getLatitude());
@@ -295,15 +260,15 @@ public class CreatePostActivity extends AppCompatActivity {
                                 boolean success = response.getBoolean("success");
 
                                 if (success) {
-                                    Toast.makeText(CreatePostActivity.this, "Post created", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(EditProfileActivity.this, "Profile saved", Toast.LENGTH_LONG).show();
                                     setResult(RESULT_OK);
-                                    CreatePostActivity.this.finish();
+                                    EditProfileActivity.this.finish();
                                 } else {
                                     String msg = response.getString("message");
-                                    Toast.makeText(CreatePostActivity.this, msg, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(EditProfileActivity.this, msg, Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
-                                Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     },
@@ -326,57 +291,8 @@ public class CreatePostActivity extends AppCompatActivity {
         catch (SecurityException ex) {
         }
         catch (Exception ex) {
-            Toast.makeText(this, "Failed to create post: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to save profile: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         };
     }
-
-    private void goBack(){
-        Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
-
-        intent.putExtra(MainActivity.FRAGMENT_TO_SELECT_KEY, PostsFragment.Posts_Fragment_Tag);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-        goBack();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_create_post, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                goBack();
-                break;
-
-            case R.id.post:
-                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-                if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-                    attemptCreatePost();
-                } else {
-                    Snackbar
-                            .make(findViewById(android.R.id.content), R.string.internet_connection_failed, Snackbar.LENGTH_LONG)
-                            .show();
-                }
-
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
-    }
-
+    */
 }
