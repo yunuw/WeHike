@@ -120,10 +120,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 // TODO: Set the value to space (" ") when it's empty string, otherwise server will return bad request as it doesn't understand the URL
                 // which looks like http://address/query?param1=&param2=, that missed values after "="
-               /* profile.phoneNumber = profile.phoneNumber.equals("") ? " " : profile.phoneNumber;
+                profile.phoneNumber = profile.phoneNumber.equals("") ? " " : profile.phoneNumber;
                 profile.email = profile.email.equals("") ? " " : profile.email;
                 profile.facebookUrl = profile.facebookUrl.equals("") ? " " : profile.facebookUrl;
-                profile.twitterUrl = profile.twitterUrl.equals("") ? " " : profile.twitterUrl;*/
+                profile.twitterUrl = profile.twitterUrl.equals("") ? " " : profile.twitterUrl;
 
                 if(imageUri != null) {
                     attemptSaveProfile();
