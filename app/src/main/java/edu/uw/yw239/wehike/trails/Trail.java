@@ -41,7 +41,7 @@ public class Trail implements Parcelable{
             JSONArray jsontrails = response.getJSONArray("places"); //response.places
 
 
-            for(int i=0; i<Math.min(jsontrails.length(), 25); i++){
+            for(int i=0; i<jsontrails.length(); i++){
                 JSONObject trailItemObj = jsontrails.getJSONObject(i);
                 JSONArray actItemArray = trailItemObj.getJSONArray("activities");
 
@@ -63,8 +63,9 @@ public class Trail implements Parcelable{
                         trail.actRatings.add(actItemObj.getDouble("rating"));
                     }
                 }
-
-                trails.add(trail);
+                if (!trail.picUrl.equals("null")){
+                    trails.add(trail);
+                }
             } //end for loop
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing json", e); //Android log the error
