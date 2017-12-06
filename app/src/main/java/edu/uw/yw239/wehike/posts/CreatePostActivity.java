@@ -3,6 +3,7 @@ package edu.uw.yw239.wehike.posts;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -58,6 +59,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private EditText postDesc;
     private ProgressBar imageLoadingProgress;
     private Uri imageUri;
+    private ProgressDialog progressDialog;
 
     // todo: change the parameter
     private static final int MAX_IMAGE_SIZE = 10485760;   //10 Mb
@@ -246,31 +248,30 @@ public class CreatePostActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-            imageLoadingProgress.setVisibility(View.VISIBLE);
-            try {
-                StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
-                    public void onUploaded(final String imageUrl) {
-                        try {
-                            Location location = LocationManager.getInstance().getLocation();
-                            if (location != null) {
-                                createPost(imageUrl, description, location);
-                            } else {
-                                Toast.makeText(CreatePostActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        catch (SecurityException ex) {
-                            Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            showProgress("Creating post");
+            StorageManager.uploadImage(imageUri, new StorageManager.OnImageUploadListener() {
+                public void onUploaded(final String imageUrl) {
+                    try {
+                        Location location = LocationManager.getInstance().getLocation();
+                        if (location != null) {
+                            createPost(imageUrl, description, location);
+                        } else {
+                            Toast.makeText(CreatePostActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                            hideProgress();
                         }
                     }
-
-                    public void onFailed(Exception ex) {
+                    catch (SecurityException ex) {
                         Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        hideProgress();
                     }
-                });
-            }
-            finally {
-                imageLoadingProgress.setVisibility(View.GONE);
-            }
+                }
+
+                public void onFailed(Exception ex) {
+                    Toast.makeText(CreatePostActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    hideProgress();
+                }
+            });
+
         } else if (focusView != null) {
             focusView.requestFocus();
         }
@@ -302,8 +303,10 @@ public class CreatePostActivity extends AppCompatActivity {
                                     String msg = response.getString("message");
                                     Toast.makeText(CreatePostActivity.this, msg, Toast.LENGTH_LONG).show();
                                 }
+                                hideProgress();
                             } catch (JSONException e) {
                                 Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                hideProgress();
                             }
                         }
                     },
@@ -317,6 +320,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
                             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), errMsg, Snackbar.LENGTH_LONG);
                             snackbar.show();
+                            hideProgress();
                         }
                     }
             );
@@ -324,10 +328,27 @@ public class CreatePostActivity extends AppCompatActivity {
             RequestSingleton.getInstance(this).add(request);
         }
         catch (SecurityException ex) {
+            hideProgress();
         }
         catch (Exception ex) {
             Toast.makeText(this, "Failed to create post: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+            hideProgress();
         };
+    }
+
+    public void showProgress(String message) {
+        hideProgress();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void hideProgress() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 
     private void goBack(){
