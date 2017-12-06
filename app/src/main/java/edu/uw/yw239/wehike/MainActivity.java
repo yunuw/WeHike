@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.support.v4.app.Fragment;
 
 import edu.uw.yw239.wehike.common.LocationManager;
 import edu.uw.yw239.wehike.posts.CreatePostActivity;
@@ -24,12 +25,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_TO_SELECT_KEY = "FRAGMENT_TO_SELECT_KEY";
 
+    public Fragment trailsFragment;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // Get the location manager asap the app start
         LocationManager locManager = LocationManager.getInstance();
+
+//        if (savedInstanceState != null){
+//            trailsFragment = getSupportFragmentManager().getFragment(savedInstanceState,"trails");
+//        }
 
         boolean openFragmentFromIntent = false;
 
@@ -61,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+//        getSupportFragmentManager().putFragment(outState, "trails",getSupportFragmentManager().findFragmentByTag(TrailsFragment.Trails_Fragment_Tag));
     }
 
     public void showTrails(View view) {
