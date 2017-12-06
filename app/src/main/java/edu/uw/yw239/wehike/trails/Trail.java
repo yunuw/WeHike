@@ -57,13 +57,17 @@ public class Trail implements Parcelable{
 
                     for (int j=0; j<actItemArray.length(); j++){
                         JSONObject actItemObj = actItemArray.getJSONObject(j);
-                        trail.actNames.add(actItemObj.getString("name"));
-                        trail.actPicUrls.add(actItemObj.getString("thumbnail"));
-                        trail.actDescriptions.add(actItemObj.getString("description"));
-                        trail.actRatings.add(actItemObj.getDouble("rating"));
+                        if (!actItemObj.getString("thumbnail").equals("null")){
+                            trail.actNames.add(actItemObj.getString("name"));
+                            trail.actPicUrls.add(actItemObj.getString("thumbnail"));
+                            trail.actDescriptions.add(actItemObj.getString("description"));
+                            trail.actRatings.add(actItemObj.getDouble("rating"));
+                        }
+
                     }
                 }
-                if (!trail.picUrl.equals("null")){
+                if (trail.actPicUrls.size()!=0){
+                    trail.picUrl = trail.actPicUrls.get(0);
                     trails.add(trail);
                 }
             } //end for loop
