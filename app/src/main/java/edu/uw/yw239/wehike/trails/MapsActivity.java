@@ -142,7 +142,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onInfoWindowClick(Marker marker){
-        Toast.makeText(this, "There are thousands of fat ducks here!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "There are thousands of fat ducks here!", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(MapsActivity.this, TrailsDetailActivity.class);
         intent.putExtra("trails details",hashMap.get(marker));
