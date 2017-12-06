@@ -47,13 +47,13 @@
             android:layout_below="@+id/post_image"
             android:layout_toRightOf="@+id/post_detail_name"
             android:text="Today is a good day! I went hiking with Sandy and Dania. The Rattlesnake Trail is amazong!"
-            android:maxLines="2" />
+            />
 
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/post_detail_name"
+            android:layout_below="@+id/post_detail_text"
             android:src="@drawable/ic_comment"
             android:layout_marginTop="15dp"/>
 
@@ -61,7 +61,7 @@
             android:id="@+id/lalala"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/post_detail_name"
+            android:layout_below="@+id/post_detail_text"
             android:layout_toRightOf="@+id/icon"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="5dp"
