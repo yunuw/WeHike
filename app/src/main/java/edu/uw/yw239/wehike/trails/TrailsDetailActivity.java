@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -67,6 +68,9 @@ public class TrailsDetailActivity extends AppCompatActivity {
         Log.d(TAG, intent == null ? "Intent is null" : "Intent is not null");
         Log.d(TAG, bundle == null ? "Bundle is null" : "Bundle is not null");
         theTrail = bundle.getParcelable("trails details");
+        if (theTrail.actPicUrls.size()==0){
+            Toast.makeText(getContext(),"There is no specific activities in the trail", Toast.LENGTH_SHORT).show();
+        }
         for (int i = 0; i<theTrail.actNames.size(); i++){
             TrailActivity trailActivity = new TrailActivity();
             trailActivity.actName = theTrail.actNames.get(i);

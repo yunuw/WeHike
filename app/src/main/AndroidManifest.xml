@@ -22,7 +22,7 @@
         android:windowSoftInputMode="stateHidden">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyDHmIDj6EG8ErAuX3J2a_cSTMvTdC6oE7o" />
 
         <activity
             android:name=".signin.SignInActivity"

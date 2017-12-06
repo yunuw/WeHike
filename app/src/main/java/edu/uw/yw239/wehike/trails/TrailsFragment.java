@@ -205,6 +205,9 @@ public class TrailsFragment extends Fragment implements MaterialSearchBar.OnSear
 //                        ((RecyclerView) recyclerView).setAdapter(mAdapter);
                         trailsList.clear();
                         trailsList.addAll(trails);
+                        if (trailsList.size()==0){
+                            Toast.makeText(getContext(),"No Trails found per your search",Toast.LENGTH_SHORT).show();
+                        }
                         trailsRecyclerViewAdapter.notifyDataSetChanged();
 
                     }
