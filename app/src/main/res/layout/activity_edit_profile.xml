@@ -19,7 +19,8 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="5dp"
         android:src="@mipmap/default_profile_image" />
 
     <LinearLayout
@@ -150,7 +151,8 @@
             android:layout_marginLeft="8dp"
             android:gravity="center"
             android:text="save"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:theme="@style/PrimaryButton"/>
 
         <Button
             android:id="@+id/cancel_edit"
@@ -161,7 +163,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:theme="@style/PrimaryButton"/>
 
     </LinearLayout>
 
