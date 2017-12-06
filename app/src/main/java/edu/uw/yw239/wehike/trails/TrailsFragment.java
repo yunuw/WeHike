@@ -186,7 +186,7 @@ public class TrailsFragment extends Fragment implements MaterialSearchBar.OnSear
         //contruct request url
         String http = "";
         if (q.equals("")){
-            http = "https://trailapi-trailapi.p.mashape.com/?lat="+lat+"&limit=25&lon="+lon+"&radius=25";
+            http = "https://trailapi-trailapi.p.mashape.com/?lat="+lat+"&limit=50&lon="+lon+"&radius=25";
         } else {
             http = "https://trailapi-trailapi.p.mashape.com/?q[city_cont]="+q+"&radius=25";
         }

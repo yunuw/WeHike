@@ -78,7 +78,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        mapFragment.setRetainInstance(true);
@@ -155,7 +155,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //contruct request url
         String http = "";
         if (q.equals("")){
-            http = "https://trailapi-trailapi.p.mashape.com/?lat="+lat+"&limit=25&lon="+lon+"&radius=25";
+            http = "https://trailapi-trailapi.p.mashape.com/?lat="+lat+"&limit=50&lon="+lon+"&radius=25";
         } else {
             http = "https://trailapi-trailapi.p.mashape.com/?q[city_cont]="+q+"&radius=25";
         }
