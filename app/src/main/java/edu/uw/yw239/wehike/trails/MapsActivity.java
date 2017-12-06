@@ -182,7 +182,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Marker marker = mMap.addMarker(new MarkerOptions().position(latlng)
                                     .title(trail.name)
                                     .snippet("Go Explore!")
-                                    .icon(BitmapDescriptorFactory.defaultMarker(260)));
+                                    .icon(BitmapDescriptorFactory.defaultMarker(200)));
                             hashMap.put(marker,trail);
                         }
 
