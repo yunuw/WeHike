@@ -82,9 +82,8 @@ public class PostDetailActivity extends AppCompatActivity{
         Intent intent = getIntent();
         postId = intent.getIntExtra(POST_ID_KEY, -1);
         commentText = (EditText) findViewById(R.id.commentEditText);
-
-        // Hide the tittle
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

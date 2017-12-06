@@ -69,7 +69,7 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
 
         // Hide the tittle
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

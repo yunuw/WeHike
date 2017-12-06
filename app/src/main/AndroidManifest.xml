@@ -41,9 +41,11 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".posts.CreatePostActivity"></activity>
+            android:name=".posts.CreatePostActivity"
+            android:label="Create Your Moment"></activity>
         <activity
-            android:name=".posts.PostDetailActivity"></activity>
+            android:name=".posts.PostDetailActivity"
+            android:label="Comments"></activity>
         <activity
             android:name=".profile.EditProfileActivity"
             android:label="My Profile" ></activity>
